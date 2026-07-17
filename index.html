@@ -31,16 +31,18 @@
     * { box-sizing: border-box; }
 
     html {
-      min-height: 100%;
-      overflow-x: hidden;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
       background: var(--cream);
     }
 
     body {
       min-width: 320px;
-      min-height: 100vh;
+      width: 100%;
+      height: 100%;
       margin: 0;
-      overflow-x: hidden;
+      overflow: hidden;
       color: var(--charcoal);
       background:
         radial-gradient(circle at 12% 28%, rgba(209, 157, 141, 0.16), transparent 23rem),
@@ -52,20 +54,24 @@
     a { color: inherit; }
 
     .kiosk {
-      min-height: 100vh;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
     /* HERO IMAGE — replace the data URL below with url("your-photo.jpg") if desired. */
     .hero {
       position: relative;
       isolation: isolate;
-      min-height: clamp(430px, 25vh, 900px);
+      flex: 0 0 25%;
+      min-height: 0;
       display: grid;
       place-items: center;
       overflow: hidden;
-      padding: clamp(34px, 4vw, 80px);
+      padding: clamp(24px, 3vh, 48px) clamp(34px, 5vw, 72px);
       color: var(--white);
       text-align: center;
       background-image:
@@ -97,12 +103,12 @@
 
     /* OFFICIAL LOGO — replace this image data URL when a final logo file is supplied. */
     .brand-mark {
-      width: clamp(124px, 10vw, 220px);
+      width: clamp(104px, 9vw, 150px);
       aspect-ratio: 1;
       display: grid;
       place-items: center;
       overflow: hidden;
-      margin-bottom: clamp(18px, 2vw, 32px);
+      margin-bottom: clamp(10px, 1.2vh, 20px);
       border: 4px solid rgba(255, 255, 255, 0.88);
       border-radius: 50%;
       background: var(--cream);
@@ -117,8 +123,8 @@
     }
 
     .eyebrow {
-      margin: 0 0 0.5em;
-      font-size: clamp(14px, 1.1vw, 24px);
+      margin: 0 0 0.35em;
+      font-size: clamp(13px, 1.1vw, 20px);
       font-weight: 700;
       letter-spacing: 0.28em;
       text-transform: uppercase;
@@ -128,7 +134,7 @@
       max-width: 13ch;
       margin: 0;
       font-family: var(--serif);
-      font-size: clamp(52px, 6.1vw, 128px);
+      font-size: clamp(46px, 5.7vw, 82px);
       font-weight: 400;
       line-height: 0.92;
       text-wrap: balance;
@@ -136,15 +142,15 @@
     }
 
     .welcome {
-      margin: 0.85em 0 0;
+      margin: 0.55em 0 0;
       font-family: var(--serif);
-      font-size: clamp(21px, 1.9vw, 38px);
+      font-size: clamp(19px, 1.8vw, 30px);
       line-height: 1.35;
     }
 
     .star-rule {
       width: min(560px, 70%);
-      margin: clamp(20px, 2vw, 34px) auto 0;
+      margin: clamp(12px, 1.3vh, 22px) auto 0;
       display: flex;
       align-items: center;
       gap: 14px;
@@ -163,20 +169,24 @@
 
     .menu-section {
       width: min(100%, 1700px);
+      min-height: 0;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
       margin: 0 auto;
-      padding: clamp(48px, 5vw, 104px) clamp(22px, 5vw, 92px) clamp(62px, 6vw, 120px);
+      padding: clamp(20px, 2.5vh, 42px) clamp(28px, 4.5vw, 72px);
     }
 
     .section-heading {
       max-width: 1050px;
-      margin: 0 auto clamp(34px, 4vw, 72px);
+      margin: 0 auto clamp(18px, 2vh, 30px);
       text-align: center;
     }
 
     .section-kicker {
-      margin: 0 0 0.6em;
+      margin: 0 0 0.35em;
       color: var(--teal);
-      font-size: clamp(14px, 1vw, 22px);
+      font-size: clamp(12px, 0.9vw, 17px);
       font-weight: 700;
       letter-spacing: 0.22em;
       text-transform: uppercase;
@@ -186,26 +196,29 @@
       margin: 0;
       color: var(--plum);
       font-family: var(--serif);
-      font-size: clamp(42px, 4.2vw, 86px);
+      font-size: clamp(34px, 3.4vw, 54px);
       font-weight: 400;
       line-height: 1;
     }
 
     .menu-grid {
+      min-height: 0;
+      flex: 1 1 auto;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: clamp(18px, 2vw, 36px);
+      grid-template-rows: repeat(3, minmax(220px, 1fr));
+      gap: clamp(16px, 1.7vw, 26px);
     }
 
     .menu-card {
       position: relative;
-      min-height: clamp(190px, 12vw, 270px);
+      min-height: 220px;
       display: grid;
-      grid-template-columns: clamp(78px, 8vw, 144px) 1fr clamp(30px, 3vw, 54px);
+      grid-template-columns: clamp(78px, 7vw, 112px) 1fr clamp(28px, 2.5vw, 42px);
       align-items: center;
       gap: clamp(16px, 2vw, 34px);
       overflow: hidden;
-      padding: clamp(24px, 3vw, 52px);
+      padding: clamp(22px, 2.4vw, 38px);
       border: 2px solid rgba(164, 136, 104, 0.25);
       border-radius: clamp(22px, 2vw, 38px);
       background: rgba(255, 255, 255, 0.88);
@@ -245,7 +258,7 @@
     }
 
     .icon-wrap {
-      width: clamp(76px, 7.4vw, 132px);
+      width: clamp(76px, 6.5vw, 104px);
       aspect-ratio: 1;
       display: grid;
       place-items: center;
@@ -271,7 +284,7 @@
       display: block;
       color: var(--charcoal);
       font-family: var(--serif);
-      font-size: clamp(29px, 2.5vw, 52px);
+      font-size: clamp(28px, 2.5vw, 42px);
       font-weight: 400;
       line-height: 1.02;
     }
@@ -280,7 +293,7 @@
       display: block;
       margin-top: 0.55em;
       color: var(--plum);
-      font-size: clamp(15px, 1.15vw, 24px);
+      font-size: clamp(15px, 1.15vw, 20px);
       font-weight: 500;
       line-height: 1.4;
     }
@@ -301,8 +314,9 @@
     }
 
     .footer {
+      flex: 0 0 auto;
       margin-top: auto;
-      padding: clamp(44px, 5vw, 88px) clamp(24px, 5vw, 90px);
+      padding: clamp(14px, 1.5vh, 24px) clamp(24px, 5vw, 90px);
       color: var(--white);
       background: var(--charcoal);
       text-align: center;
@@ -311,16 +325,16 @@
     .footer h2 {
       margin: 0;
       font-family: var(--serif);
-      font-size: clamp(30px, 3vw, 60px);
+      font-size: clamp(20px, 2vw, 32px);
       font-weight: 400;
     }
 
     .footer-address {
-      margin: 0.9em 0 0;
+      margin: 0.35em 0 0;
       color: rgba(255, 255, 255, 0.78);
-      font-size: clamp(17px, 1.3vw, 27px);
+      font-size: clamp(13px, 1.05vw, 17px);
       font-style: normal;
-      line-height: 1.65;
+      line-height: 1.35;
     }
 
     .footer a {
@@ -331,26 +345,31 @@
 
     .assistance {
       width: fit-content;
-      margin: clamp(24px, 3vw, 42px) auto 0;
-      padding: 0.85em 1.4em;
+      margin: clamp(7px, 0.7vh, 12px) auto 0;
+      padding: 0;
+      border: 0;
       border: 1px solid rgba(233, 226, 211, 0.42);
       border-radius: 999px;
       color: var(--cream);
-      font-size: clamp(15px, 1.1vw, 22px);
+      font-size: clamp(12px, 0.95vw, 15px);
       font-weight: 600;
     }
 
     @media (max-width: 760px) {
-      .hero { min-height: 500px; }
-      .menu-grid { grid-template-columns: 1fr; }
-      .menu-card { min-height: 170px; grid-template-columns: 74px 1fr 30px; }
+      .hero { min-height: 0; }
+      .menu-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); }
+      .menu-card { min-height: 0; grid-template-columns: 1fr; justify-items: center; text-align: center; padding: 12px; }
+      .card-description, .arrow, .star-rule { display: none; }
+      .icon-wrap { width: clamp(42px, 12vw, 64px); }
+      .card-title { margin-top: 6px; font-size: clamp(18px, 5vw, 27px); }
+      .footer { padding-block: 8px; }
+      .assistance { display: none; }
     }
 
     @media (max-width: 440px) {
-      .menu-card { padding: 22px 18px 22px 26px; gap: 13px; }
-      .icon-wrap { width: 64px; }
-      .card-title { font-size: 27px; }
-      .card-description { font-size: 14px; }
+      .menu-card { padding: 8px; gap: 4px; }
+      .icon-wrap { width: 42px; }
+      .card-title { font-size: 18px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -402,9 +421,9 @@
           <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></svg></span>
         </a>
 
-        <a class="menu-card" data-destination="newHere" href="https://olghelotes.org/our-parish" aria-label="New Here? — Learn about our parish community">
+        <a class="menu-card" data-destination="newHere" href="https://olghelotes.org/our-parish" aria-label="I'm New — Learn about our parish community">
           <span class="icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c.8-4.2 3.3-6.3 7.5-6.3s6.7 2.1 7.5 6.3M18 5h4M20 3v4"/></svg></span>
-          <span class="card-copy"><strong class="card-title">New Here?</strong><span class="card-description">Learn about our parish community</span></span>
+          <span class="card-copy"><strong class="card-title">I'm New</strong><span class="card-description">Learn about our parish community</span></span>
           <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></svg></span>
         </a>
 
@@ -414,23 +433,12 @@
           <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></svg></span>
         </a>
 
-        <a class="menu-card" data-destination="giveOnline" href="https://olghelotes.org/online-giving" aria-label="Give Online — Support the parish securely online">
+        <a class="menu-card" data-destination="giveOnline" href="https://olghelotes.org/online-giving" aria-label="Give — Support the parish securely online">
           <span class="icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21S3.5 16.4 3.5 9.5A4.5 4.5 0 0 1 12 7.4a4.5 4.5 0 0 1 8.5 2.1C20.5 16.4 12 21 12 21Z"/><path d="M12 10v6M9.8 12h3.3a1.5 1.5 0 0 1 0 3H11"/></svg></span>
-          <span class="card-copy"><strong class="card-title">Give Online</strong><span class="card-description">Support the parish securely online</span></span>
+          <span class="card-copy"><strong class="card-title">Give</strong><span class="card-description">Support the parish securely online</span></span>
           <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></svg></span>
         </a>
 
-        <a class="menu-card" data-destination="bulletin" href="https://olghelotes.org/bulletins" aria-label="Bulletin — Read the latest parish news and announcements">
-          <span class="icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3h14v18H5zM8 7h8M8 11h8M8 15h5"/></svg></span>
-          <span class="card-copy"><strong class="card-title">Bulletin</strong><span class="card-description">Read the latest parish news and announcements</span></span>
-          <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></svg></span>
-        </a>
-
-        <a class="menu-card" data-destination="contact" href="https://olghelotes.org/contact-us" aria-label="Contact Us — Directions, phone and office information">
-          <span class="icon-wrap" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a15 15 0 0 0 5 5L15 13l5 2v4c0 1.1-.9 2-2 2C9.7 21 3 14.3 3 6c0-1.1.9-2 2-2Z"/></svg></span>
-          <span class="card-copy"><strong class="card-title">Contact Us</strong><span class="card-description">Directions, phone and office information</span></span>
-          <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></svg></span>
-        </a>
       </nav>
     </section>
 
@@ -452,9 +460,7 @@
       events: "https://olghelotes.org/calendar",
       newHere: "https://olghelotes.org/our-parish",
       ministries: "https://olghelotes.org/ministries-organizations",
-      giveOnline: "https://olghelotes.org/online-giving",
-      bulletin: "https://olghelotes.org/bulletins",
-      contact: "https://olghelotes.org/contact-us"
+      giveOnline: "https://olghelotes.org/online-giving"
     };
 
     document.querySelectorAll("[data-destination]").forEach((card) => {
@@ -483,5 +489,374 @@
 
     resetInactivityTimer();
   </script>
+</body>
+</html>
+
+On Fri, Jul 17, 2026 at 12:11 PM Jacob Noble <jacobalexandernoble@gmail.com> wrote:
+
+
+On Fri, Jul 17, 2026 at 11:48 AM Jacob Noble <jnoble@olghelotes.org> wrote:
+
+From: Jacob Noble <jnoble@olghelotes.org>
+Sent: Friday, July 17, 2026 11:35 AM
+To: Jacob Noble <jacobalexandernoble@gmail.com>
+Subject: code
+ 
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  />
+  <title>Our Lady of Guadalupe Kiosk</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --charcoal: #3a3e42;
+      --taupe: #a48868;
+      --plum: #584d52;
+      --hero-wash: #b7cedb;
+      --blue: #2f8686;
+      --teal: #2f8686;
+      --rose: #d19d8d;
+      --cream: #e9e2d3;
+      --page-bg: #ffffff;
+      --white: #ffffff;
+      --shadow: 0 14px 34px rgba(58, 62, 66, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      background: var(--page-bg);
+      color: var(--charcoal);
+      font-family: "TeX Gyre Termes", "Tex Gyre Termes", Georgia, "Times New Roman", serif;
+      overscroll-behavior: none;
+    }
+
+    h1,
+    h2,
+    h3,
+    .brand-mark,
+    .menu-card strong {
+      font-family: "Montserrat", Arial, sans-serif;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 34vh;
+      padding: 48px 34px 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      text-align: center;
+      color: var(--white);
+      background:
+        linear-gradient(rgba(183, 206, 219, 0.38), rgba(183, 206, 219, 0.38)),
+        linear-gradient(rgba(58, 62, 66, 0.28), rgba(47, 134, 134, 0.54)),
+        url("church-hero.jpg");
+      background-position: center;
+      background-size: cover;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      width: min(920px, 100%);
+    }
+
+    .brand-mark {
+      width: 126px;
+      height: 126px;
+      margin: 0 auto 22px;
+      border: 4px solid rgba(233, 226, 211, 0.9);
+      border-radius: 50%;
+      background: rgba(233, 226, 211, 0.94);
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .guadalupe-mark {
+      width: 104px;
+      height: 108px;
+      display: block;
+      object-fit: contain;
+    }
+
+    .hero-stars {
+      width: min(520px, 72vw);
+      height: 46px;
+      margin: 4px auto 16px;
+      background: url("star-line.png") center / contain no-repeat;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(46px, 5vw, 82px);
+      font-weight: 700;
+      line-height: 1.02;
+      text-wrap: balance;
+    }
+
+    .hero p {
+      margin: 18px 0 0;
+      font-size: clamp(20px, 2vw, 31px);
+      line-height: 1.35;
+    }
+
+    .hero .hero-location {
+      margin: 12px 0 0;
+      font-size: clamp(14px, 1.3vw, 20px);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      line-height: 1.25;
+    }
+
+    .menu-section {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 36px 28px 46px;
+    }
+
+    .menu-title {
+      margin: 0 0 28px;
+      text-align: center;
+      color: var(--plum);
+      font-size: clamp(34px, 3vw, 50px);
+      font-weight: 700;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .menu-card {
+      min-height: 205px;
+      padding: 26px 22px;
+      border: 3px solid transparent;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+    }
+
+    .menu-card:nth-child(4n + 1) { border-color: var(--teal); }
+    .menu-card:nth-child(4n + 2) { border-color: var(--blue); }
+    .menu-card:nth-child(4n + 3) { border-color: var(--rose); }
+    .menu-card:nth-child(4n + 4) { border-color: var(--taupe); }
+
+    .menu-card:active {
+      transform: scale(0.97);
+      background: var(--white);
+    }
+
+    .icon-wrap {
+      width: 74px;
+      height: 74px;
+      margin-bottom: 16px;
+      border-radius: 50%;
+      background: var(--cream);
+      color: var(--teal);
+      display: grid;
+      place-items: center;
+    }
+
+    .icon-wrap svg {
+      width: 40px;
+      height: 40px;
+      fill: currentColor;
+    }
+
+    .menu-card strong {
+      font-size: clamp(25px, 2.4vw, 37px);
+      line-height: 1.1;
+      color: var(--charcoal);
+    }
+
+    .menu-card span {
+      margin-top: 9px;
+      max-width: 430px;
+      color: var(--plum);
+      font-size: clamp(15px, 1.3vw, 21px);
+      line-height: 1.35;
+    }
+
+    .footer {
+      margin-top: auto;
+      padding: 30px 24px 34px;
+      background: var(--charcoal);
+      color: var(--white);
+      text-align: center;
+      font-family: "TeX Gyre Termes", "Tex Gyre Termes", Georgia, "Times New Roman", serif;
+      line-height: 1.4;
+    }
+
+    .footer-title {
+      margin: 0 0 18px;
+      color: var(--white);
+      font-family: "Montserrat", Arial, sans-serif;
+      font-size: clamp(23px, 2.8vw, 36px);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .footer-contact {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: clamp(18px, 1.8vw, 25px);
+      line-height: 1.45;
+    }
+
+    .footer-phone {
+      color: var(--white);
+      font-family: "Montserrat", Arial, sans-serif;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 5px;
+      text-decoration-thickness: 2px;
+    }
+
+    .footer-annex-title {
+      margin: 26px 0 6px;
+      color: rgba(255, 255, 255, 0.78);
+      font-family: "Montserrat", Arial, sans-serif;
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 700;
+      line-height: 1.18;
+    }
+
+    .footer-annex {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: clamp(17px, 1.8vw, 24px);
+      line-height: 1.4;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="hero-content">
+        <div class="brand-mark">
+          <img class="guadalupe-mark" src="guadalupe-silhouette.png" alt="Our Lady of Guadalupe silhouette">
+        </div>
+        <div class="hero-stars" aria-hidden="true"></div>
+        <h1>Our Lady of Guadalupe</h1>
+        <p class="hero-location">Helotes, Texas</p>
+        <p>Welcome. Touch an option below to begin.</p>
+      </div>
+    </header>
+
+    <section class="menu-section">
+      <h2 class="menu-title">How may we help you?</h2>
+
+      <div class="menu-grid">
+        <a class="menu-card" href="https://www.youtube.com/channel/UCr7Jn5Zr73K06VhNHByDFPA">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></div>
+          <strong>Watch Live</strong>
+          <span>View Mass and parish livestreams</span>
+        </a>
+
+        <a class="menu-card" href="https://olghelotes.org/mass-times">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 2l3 4h4v16H5V6h4l3-4zm0 3.3L10.7 7h2.6L12 5.3zM9 10v8h2v-3h2v3h2v-8H9z"></path></svg></div>
+          <strong>Mass Times</strong>
+          <span>Mass, confession and service times</span>
+        </a>
+
+        <a class="menu-card" href="https://olghelotes.org/calendar">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2zm11 8H6v10h12V10z"></path></svg></div>
+          <strong>Events</strong>
+          <span>See upcoming parish activities</span>
+        </a>
+
+        <a class="menu-card" href="https://olghelotes.org/our-parish">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm-9 10c0-5 4-8 9-8s9 3 9 8H3z"></path></svg></div>
+          <strong>New Here?</strong>
+          <span>Learn about our parish community</span>
+        </a>
+
+        <a class="menu-card" href="https://olghelotes.org/ministries-and-organizations">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8 0a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM1 21c0-4 3-7 7-7s7 3 7 7H1zm11.5 0c0-2.5-1-4.8-2.8-6.4A8 8 0 0 1 16 14c4 0 7 3 7 7H12.5z"></path></svg></div>
+          <strong>Ministries</strong>
+          <span>Discover ways to participate and serve</span>
+        </a>
+
+        <a class="menu-card" href="https://olghelotes.org/online-giving">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 21s-8-4.6-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.4-8 11-8 11z"></path></svg></div>
+          <strong>Give Online</strong>
+          <span>Support the parish securely online</span>
+        </a>
+
+        <a class="menu-card" href="https://olghelotes.org/becoming-a-parishioner">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 2l7 5v5h2v9H3v-9h2V7l7-5zm0 3.2L7 8.8V12h10V8.8l-5-3.6zM6 14v5h3v-5H6zm5 0v5h2v-5h-2zm4 0v5h3v-5h-3z"></path></svg></div>
+          <strong>Join Parish</strong>
+          <span>Register and become part of our parish</span>
+        </a>
+
+        <a class="menu-card" href="https://olghelotes.org/contact-us">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.2 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.8 21 3 13.2 3 3.6c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .9-.3 1.2l-2.1 2.2z"></path></svg></div>
+          <strong>Contact Us</strong>
+          <span>Directions, phone number and office information</span>
+        </a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <h2 class="footer-title">Our Lady of Guadalupe Catholic Church</h2>
+      <p class="footer-contact">
+        13715 Riggs Rd, Helotes, TX 78023<br>
+        <span class="footer-phone">(210) 695-8791</span>
+      </p>
+      <h3 class="footer-annex-title">The Annex of Our Lady of Guadalupe</h3>
+      <p class="footer-annex">
+        11762 FM1560<br>
+        Helotes, TX 78023
+      </p>
+    </footer>
+  </main>
 </body>
 </html>
