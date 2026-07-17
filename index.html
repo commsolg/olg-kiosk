@@ -1,400 +1,359 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  />
+  <title>Our Lady of Guadalupe Kiosk</title>
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<title>Our Lady of Guadalupe Kiosk</title>
+  <style>
+    :root {
+      --charcoal: #3a3e42;
+      --taupe: #a48868;
+      --plum: #584d52;
+      --hero-wash: #b7cedb;
+      --blue: #2f8686;
+      --teal: #2f8686;
+      --rose: #d19d8d;
+      --cream: #e9e2d3;
+      --page-bg: #ffffff;
+      --white: #ffffff;
+      --shadow: 0 14px 34px rgba(58, 62, 66, 0.18);
+    }
 
-<style>
-:root {
---navy: #18324a;
---navy-light: #264e70;
---gold: #d6aa55;
---cream: #f7f2e8;
---white: #ffffff;
---text: #17212b;
---shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
-}
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-* {
-box-sizing: border-box;
--webkit-tap-highlight-color: transparent;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-html,
-body {
-width: 100%;
-min-height: 100%;
-margin: 0;
-padding: 0;
-font-family: Arial, Helvetica, sans-serif;
-background: var(--cream);
-color: var(--text);
-overscroll-behavior: none;
-}
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
 
-body {
-min-height: 100vh;
-}
+    body {
+      background: var(--page-bg);
+      color: var(--charcoal);
+      font-family: "TeX Gyre Termes", "Tex Gyre Termes", Georgia, "Times New Roman", serif;
+      overscroll-behavior: none;
+    }
 
-.page {
-width: 100%;
-min-height: 100vh;
-display: flex;
-flex-direction: column;
-}
+    h1,
+    h2,
+    h3,
+    .brand-mark,
+    .menu-card strong {
+      font-family: "Montserrat", Arial, sans-serif;
+    }
 
-.hero {
-min-height: 34vh;
-padding: 56px 42px 44px;
-display: flex;
-flex-direction: column;
-justify-content: flex-end;
-text-align: center;
-color: var(--white);
-background:
-linear-gradient(
-rgba(18, 40, 60, 0.44),
-rgba(18, 40, 60, 0.82)
-),
-url("https://olghelotes.org/photoalbums/home-page/Church%20Front.jpg");
-background-size: cover;
-background-position: center;
-}
+    a {
+      color: inherit;
+    }
 
-.hero-logo {
-width: 130px;
-height: 130px;
-margin: 0 auto 22px;
-border-radius: 50%;
-background: rgba(255, 255, 255, 0.94);
-display: flex;
-align-items: center;
-justify-content: center;
-box-shadow: var(--shadow);
-color: var(--navy);
-font-size: 54px;
-font-weight: bold;
-}
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-.hero h1 {
-margin: 0;
-font-family: Georgia, "Times New Roman", serif;
-font-size: clamp(42px, 5vw, 78px);
-line-height: 1.05;
-}
+    .hero {
+      position: relative;
+      min-height: 34vh;
+      padding: 48px 34px 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      text-align: center;
+      color: var(--white);
+      background:
+        linear-gradient(rgba(183, 206, 219, 0.38), rgba(183, 206, 219, 0.38)),
+        linear-gradient(rgba(58, 62, 66, 0.28), rgba(47, 134, 134, 0.54)),
+        url("church-hero.jpg");
+      background-position: center;
+      background-size: cover;
+    }
 
-.hero p {
-margin: 18px 0 0;
-font-size: clamp(22px, 2.2vw, 34px);
-line-height: 1.4;
-}
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      width: min(920px, 100%);
+    }
 
-.menu-section {
-flex: 1;
-width: 100%;
-max-width: 1200px;
-margin: 0 auto;
-padding: 34px 30px 40px;
-}
+    .brand-mark {
+      width: 126px;
+      height: 126px;
+      margin: 0 auto 22px;
+      border: 4px solid rgba(233, 226, 211, 0.9);
+      border-radius: 50%;
+      background: rgba(233, 226, 211, 0.94);
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
 
-.menu-title {
-margin: 0 0 28px;
-text-align: center;
-color: var(--navy);
-font-size: clamp(26px, 2.4vw, 40px);
-}
+    .guadalupe-mark {
+      width: 104px;
+      height: 108px;
+      display: block;
+      object-fit: contain;
+    }
 
-.menu-grid {
-display: grid;
-grid-template-columns: repeat(2, minmax(0, 1fr));
-gap: 24px;
-}
+    .hero-stars {
+      width: min(520px, 72vw);
+      height: 46px;
+      margin: 4px auto 16px;
+      background: url("star-line.png") center / contain no-repeat;
+    }
 
-.menu-card {
-min-height: 190px;
-padding: 28px 22px;
-border: 0;
-border-radius: 24px;
-background: var(--white);
-color: var(--navy);
-box-shadow: var(--shadow);
-text-decoration: none;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-text-align: center;
-cursor: pointer;
-transition:
-transform 0.15s ease,
-box-shadow 0.15s ease,
-background 0.15s ease;
-}
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(46px, 5vw, 82px);
+      font-weight: 700;
+      line-height: 1.02;
+      text-wrap: balance;
+    }
 
-.menu-card:active {
-transform: scale(0.97);
-background: #edf4f8;
-box-shadow: 0 7px 16px rgba(0, 0, 0, 0.16);
-}
+    .hero p {
+      margin: 18px 0 0;
+      font-size: clamp(20px, 2vw, 31px);
+      line-height: 1.35;
+    }
 
-.icon {
-width: 68px;
-height: 68px;
-margin-bottom: 18px;
-display: flex;
-align-items: center;
-justify-content: center;
-color: var(--navy-light);
-}
+    .hero .hero-location {
+      margin: 12px 0 0;
+      font-size: clamp(14px, 1.3vw, 20px);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      line-height: 1.25;
+    }
 
-.icon svg {
-width: 100%;
-height: 100%;
-fill: currentColor;
-}
+    .menu-section {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: 36px 28px 46px;
+    }
 
-.menu-card strong {
-display: block;
-font-size: clamp(25px, 2.5vw, 38px);
-line-height: 1.12;
-}
+    .menu-title {
+      margin: 0 0 28px;
+      text-align: center;
+      color: var(--plum);
+      font-size: clamp(34px, 3vw, 50px);
+      font-weight: 700;
+    }
 
-.menu-card span {
-margin-top: 10px;
-color: #53616d;
-font-size: clamp(16px, 1.4vw, 22px);
-line-height: 1.3;
-}
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
 
-.footer {
-padding: 26px 30px 34px;
-text-align: center;
-background: var(--navy);
-color: var(--white);
-font-size: clamp(16px, 1.4vw, 22px);
-line-height: 1.6;
-}
+    .menu-card {
+      min-height: 205px;
+      padding: 26px 22px;
+      border: 3px solid transparent;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+    }
 
-.footer strong {
-color: #f3cf82;
-}
+    .menu-card:nth-child(4n + 1) { border-color: var(--teal); }
+    .menu-card:nth-child(4n + 2) { border-color: var(--blue); }
+    .menu-card:nth-child(4n + 3) { border-color: var(--rose); }
+    .menu-card:nth-child(4n + 4) { border-color: var(--taupe); }
 
-.return-message {
-margin-top: 16px;
-font-size: 0.9em;
-opacity: 0.82;
-}
+    .menu-card:active {
+      transform: scale(0.97);
+      background: var(--white);
+    }
 
-@media (max-width: 700px) {
-.hero {
-min-height: 30vh;
-padding: 38px 20px 30px;
-}
+    .icon-wrap {
+      width: 74px;
+      height: 74px;
+      margin-bottom: 16px;
+      border-radius: 50%;
+      background: var(--cream);
+      color: var(--teal);
+      display: grid;
+      place-items: center;
+    }
 
-.hero-logo {
-width: 92px;
-height: 92px;
-font-size: 40px;
-}
+    .icon-wrap svg {
+      width: 40px;
+      height: 40px;
+      fill: currentColor;
+    }
 
-.menu-section {
-padding: 26px 18px 32px;
-}
+    .menu-card strong {
+      font-size: clamp(25px, 2.4vw, 37px);
+      line-height: 1.1;
+      color: var(--charcoal);
+    }
 
-.menu-grid {
-gap: 16px;
-}
+    .menu-card span {
+      margin-top: 9px;
+      max-width: 430px;
+      color: var(--plum);
+      font-size: clamp(15px, 1.3vw, 21px);
+      line-height: 1.35;
+    }
 
-.menu-card {
-min-height: 155px;
-padding: 22px 14px;
-border-radius: 18px;
-}
+    .footer {
+      margin-top: auto;
+      padding: 30px 24px 34px;
+      background: var(--charcoal);
+      color: var(--white);
+      text-align: center;
+      font-family: "TeX Gyre Termes", "Tex Gyre Termes", Georgia, "Times New Roman", serif;
+      line-height: 1.4;
+    }
 
-.icon {
-width: 50px;
-height: 50px;
-margin-bottom: 12px;
-}
-}
+    .footer-title {
+      margin: 0 0 18px;
+      color: var(--white);
+      font-family: "Montserrat", Arial, sans-serif;
+      font-size: clamp(23px, 2.8vw, 36px);
+      font-weight: 700;
+      line-height: 1.15;
+    }
 
-@media (orientation: portrait) and (min-width: 800px) {
-.menu-grid {
-grid-template-columns: repeat(2, minmax(0, 1fr));
-}
+    .footer-contact {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: clamp(18px, 1.8vw, 25px);
+      line-height: 1.45;
+    }
 
-.menu-card {
-min-height: 230px;
-}
-}
-</style>
+    .footer-phone {
+      color: var(--white);
+      font-family: "Montserrat", Arial, sans-serif;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 5px;
+      text-decoration-thickness: 2px;
+    }
+
+    .footer-annex-title {
+      margin: 26px 0 6px;
+      color: rgba(255, 255, 255, 0.78);
+      font-family: "Montserrat", Arial, sans-serif;
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 700;
+      line-height: 1.18;
+    }
+
+    .footer-annex {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: clamp(17px, 1.8vw, 24px);
+      line-height: 1.4;
+    }
+  </style>
 </head>
 
 <body>
-<main class="page">
+  <main class="page">
+    <header class="hero">
+      <div class="hero-content">
+        <div class="brand-mark">
+          <img class="guadalupe-mark" src="guadalupe-silhouette.png" alt="Our Lady of Guadalupe silhouette">
+        </div>
+        <div class="hero-stars" aria-hidden="true"></div>
+        <h1>Our Lady of Guadalupe</h1>
+        <p class="hero-location">Helotes, Texas</p>
+        <p>Welcome. Touch an option below to begin.</p>
+      </div>
+    </header>
 
-<header class="hero">
-<div class="hero-logo">OLG</div>
+    <section class="menu-section">
+      <h2 class="menu-title">How may we help you?</h2>
 
-<h1>Welcome to Our Lady of Guadalupe</h1>
+      <div class="menu-grid">
+        <a class="menu-card" href="https://www.youtube.com/channel/UCr7Jn5Zr73K06VhNHByDFPA">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></div>
+          <strong>Watch Live</strong>
+          <span>View Mass and parish livestreams</span>
+        </a>
 
-<p>Touch an option below to begin.</p>
-</header>
+        <a class="menu-card" href="https://olghelotes.org/mass-times">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 2l3 4h4v16H5V6h4l3-4zm0 3.3L10.7 7h2.6L12 5.3zM9 10v8h2v-3h2v3h2v-8H9z"></path></svg></div>
+          <strong>Mass Times</strong>
+          <span>Mass, confession and service times</span>
+        </a>
 
-<section class="menu-section">
-<h2 class="menu-title">How may we help you?</h2>
+        <a class="menu-card" href="https://olghelotes.org/calendar">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2zm11 8H6v10h12V10z"></path></svg></div>
+          <strong>Events</strong>
+          <span>See upcoming parish activities</span>
+        </a>
 
-<div class="menu-grid">
+        <a class="menu-card" href="https://olghelotes.org/our-parish">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm-9 10c0-5 4-8 9-8s9 3 9 8H3z"></path></svg></div>
+          <strong>New Here?</strong>
+          <span>Learn about our parish community</span>
+        </a>
 
-<!-- WATCH LIVE -->
-<a class="menu-card" href="https://olghelotes.org/live" target="_self">
-<div class="icon">
-<svg viewBox="0 0 24 24" aria-hidden="true">
-<path d="M8 5v14l11-7z"></path>
-</svg>
-</div>
+        <a class="menu-card" href="https://olghelotes.org/ministries-and-organizations">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8 0a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM1 21c0-4 3-7 7-7s7 3 7 7H1zm11.5 0c0-2.5-1-4.8-2.8-6.4A8 8 0 0 1 16 14c4 0 7 3 7 7H12.5z"></path></svg></div>
+          <strong>Ministries</strong>
+          <span>Discover ways to participate and serve</span>
+        </a>
 
-<strong>Watch Live</strong>
-<span>View Mass and parish livestreams</span>
-</a>
+        <a class="menu-card" href="https://olghelotes.org/online-giving">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 21s-8-4.6-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.4-8 11-8 11z"></path></svg></div>
+          <strong>Give Online</strong>
+          <span>Support the parish securely online</span>
+        </a>
 
-<!-- MASS TIMES -->
-<a class="menu-card" href="https://olghelotes.org/mass-times" target="_self">
-<div class="icon">
-<svg viewBox="0 0 24 24" aria-hidden="true">
-<path d="M12 2l3 4h4v16H5V6h4l3-4zm0 3.3L10.7 7h2.6L12 5.3zM9 10v8h2v-3h2v3h2v-8H9z"></path>
-</svg>
-</div>
+        <a class="menu-card" href="https://olghelotes.org/becoming-a-parishioner">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 2l7 5v5h2v9H3v-9h2V7l7-5zm0 3.2L7 8.8V12h10V8.8l-5-3.6zM6 14v5h3v-5H6zm5 0v5h2v-5h-2zm4 0v5h3v-5h-3z"></path></svg></div>
+          <strong>Join Parish</strong>
+          <span>Register and become part of our parish</span>
+        </a>
 
-<strong>Mass Times</strong>
-<span>Mass, confession and service times</span>
-</a>
+        <a class="menu-card" href="https://olghelotes.org/contact-us">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.2 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.8 21 3 13.2 3 3.6c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .9-.3 1.2l-2.1 2.2z"></path></svg></div>
+          <strong>Contact Us</strong>
+          <span>Directions, phone number and office information</span>
+        </a>
+      </div>
+    </section>
 
-<!-- EVENTS -->
-<a class="menu-card" href="https://olghelotes.org/calendar" target="_self">
-<div class="icon">
-<svg viewBox="0 0 24 24" aria-hidden="true">
-<path d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2zm11 8H6v10h12V10z"></path>
-</svg>
-</div>
-
-<strong>Events</strong>
-<span>See upcoming parish activities</span>
-</a>
-
-<!-- NEW HERE -->
-<a class="menu-card" href="https://olghelotes.org/our-parish" target="_self">
-<div class="icon">
-<svg viewBox="0 0 24 24" aria-hidden="true">
-<path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm-9 10c0-5 4-8 9-8s9 3 9 8H3z"></path>
-</svg>
-</div>
-
-<strong>New Here?</strong>
-<span>Learn about our parish community</span>
-</a>
-
-<!-- MINISTRIES -->
-<a class="menu-card" href="https://olghelotes.org/ministries-organizations" target="_self">
-<div class="icon">
-<svg viewBox="0 0 24 24" aria-hidden="true">
-<path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8 0a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM1 21c0-4 3-7 7-7s7 3 7 7H1zm11.5 0c0-2.5-1-4.8-2.8-6.4A8 8 0 0 1 16 14c4 0 7 3 7 7H12.5z"></path>
-</svg>
-</div>
-
-<strong>Ministries</strong>
-<span>Discover ways to participate and serve</span>
-</a>
-
-<!-- GIVE -->
-<a class="menu-card" href="https://olghelotes.org/online-giving" target="_self">
-<div class="icon">
-<svg viewBox="0 0 24 24" aria-hidden="true">
-<path d="M12 21s-8-4.6-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.4-8 11-8 11z"></path>
-</svg>
-</div>
-
-<strong>Give Online</strong>
-<span>Support the parish securely online</span>
-</a>
-
-<!-- EMPLOYMENT -->
-<a class="menu-card" href="https://olghelotes.org/employment" target="_self">
-<div class="icon">
-<svg viewBox="0 0 24 24" aria-hidden="true">
-<path d="M9 4V2h6v2h5v17H4V4h5zm2 0h2V3h-2v1zm-5 6v9h12v-9h-4v2h-4v-2H6z"></path>
-</svg>
-</div>
-
-<strong>Employment</strong>
-<span>View openings and apply</span>
-</a>
-
-<!-- CONTACT -->
-<a class="menu-card" href="https://olghelotes.org/contact-us" target="_self">
-<div class="icon">
-<svg viewBox="0 0 24 24" aria-hidden="true">
-<path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.2 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.8 21 3 13.2 3 3.6c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .9-.3 1.2l-2.1 2.2z"></path>
-</svg>
-</div>
-
-<strong>Contact Us</strong>
-<span>Directions, phone number and office information</span>
-</a>
-
-</div>
-</section>
-
-<footer class="footer">
-<strong>Our Lady of Guadalupe Catholic Church</strong><br>
-13715 Riggs Road, Helotes, Texas 78023<br>
-(210) 695-8791
-
-<div class="return-message">
-This screen returns to the home menu after inactivity.
-</div>
-</footer>
-
-</main>
-
-<script>
-/*
-This refreshes the kiosk homepage after 90 seconds
-without a touch, click, scroll or key press.
-*/
-
-const HOME_TIMEOUT = 90 * 1000;
-let inactivityTimer;
-
-function returnHome() {
-window.location.href = window.location.origin + window.location.pathname;
-}
-
-function resetInactivityTimer() {
-clearTimeout(inactivityTimer);
-inactivityTimer = setTimeout(returnHome, HOME_TIMEOUT);
-}
-
-[
-"touchstart",
-"touchmove",
-"click",
-"mousemove",
-"scroll",
-"keydown"
-].forEach((eventName) => {
-document.addEventListener(eventName, resetInactivityTimer, {
-passive: true
-});
-});
-
-resetInactivityTimer();
-</script>
+    <footer class="footer">
+      <h2 class="footer-title">Our Lady of Guadalupe Catholic Church</h2>
+      <p class="footer-contact">
+        13715 Riggs Rd, Helotes, TX 78023<br>
+        <span class="footer-phone">(210) 695-8791</span>
+      </p>
+      <h3 class="footer-annex-title">The Annex of Our Lady of Guadalupe</h3>
+      <p class="footer-annex">
+        11762 FM1560<br>
+        Helotes, TX 78023
+      </p>
+    </footer>
+  </main>
 </body>
 </html>
+```
