@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>OLG Kiosk Player</title>
+
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+    }
+
+    #screen {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #fff;
+    }
+
+    #status {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #3a3e42;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      font-size: 24px;
+      z-index: 10;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="status">Loading OLG Kiosk...</div>
+
+  <iframe
+    id="screen"
+    title="OLG Kiosk Content"
+    allow="autoplay; fullscreen"
+  ></iframe>
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+    import {
+      getDatabase,
+      ref,
+      onValue
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBXJxs6cFXJVCfDuFPhZFpK34N1HiHqMy8",
+      authDomain: "olg-kiosk-control.firebaseapp.com",
+      databaseURL: "https://olg-kiosk-control-default-rtdb.firebaseio.com",
+      projectId: "olg-kiosk-control",
+      storageBucket: "olg-kiosk-control.firebasestorage.app",
+      messagingSenderId: "1060266581212",
+      appId: "1:1060266581212:web:0475a741bc19fb45f9e819"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    const pages = {
+
+      homepage:
+        "https://commsolg.github.io/olg-kiosk/",
+
+      slideshow:
+        "https://docs.google.com/presentation/d/e/2PACX-1vTQxxSHZe9BlXLFHPyk7HStdfkBI_p2fvKi2zYDUV6zz4V5FOZb-CNzHaXg8FeyDzeaPGpEUal26u_g/pub?start=true&loop=true&delayms=15000",
+
+      thermometer:
+        "https://script.google.com/macros/s/AKfycbxmqh5wvGYeaxEqPv-RtquLgrGdT-rFV1nEAcmvMB64vF904yFyceCzuowvC5zRwop8vA/exec"
+
+    };
+
+
+    const screen = document.getElementById("screen");
+    const status = document.getElementById("status");
+
+    let currentScreen = "";
+
+
+    function showScreen(name) {
+
+      const url = pages[name] || pages.homepage;
+
+      if (currentScreen === name) {
+        return;
+      }
+
+      currentScreen = name;
+
+      screen.src = url;
+
+      screen.onload = () => {
+        status.style.display = "none";
+      };
+
+    }
+
+
+    const screenRef = ref(database, "kiosk/screen");
+
+    onValue(
+      screenRef,
+
+      (snapshot) => {
+
+        const selectedScreen = snapshot.val() || "homepage";
+
+        console.log("Kiosk command:", selectedScreen);
+
+        showScreen(selectedScreen);
+
+      },
+
+      (error) => {
+
+        console.error("Firebase error:", error);
+
+        status.textContent = "Unable to connect to kiosk control.";
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
