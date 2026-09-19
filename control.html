@@ -81,6 +81,11 @@
       color: white;
     }
 
+    .automatic {
+      background: #b7cedb;
+      color: #3a3e42;
+    }
+
     .logout {
       background: #eee;
       color: #555;
@@ -110,6 +115,12 @@
       font-size: 22px;
       margin-top: 5px;
     }
+
+    .mode {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #777;
+    }
   </style>
 </head>
 
@@ -118,7 +129,9 @@
 <div class="panel">
 
   <h1>OLG Kiosk Control</h1>
-  <div class="subtitle">Our Lady of Guadalupe · Helotes, Texas</div>
+  <div class="subtitle">
+    Our Lady of Guadalupe · Helotes, Texas
+  </div>
 
   <div id="loginBox">
 
@@ -145,21 +158,45 @@
     <div class="current">
       Currently displaying
       <strong id="currentScreen">Loading...</strong>
+
+      <div class="mode">
+        Mode:
+        <span id="currentMode">Loading...</span>
+      </div>
     </div>
 
-    <button class="homepage" data-screen="homepage">
+    <button
+      class="homepage"
+      data-screen="homepage"
+    >
       Show Homepage
     </button>
 
-    <button class="slideshow" data-screen="slideshow">
+    <button
+      class="slideshow"
+      data-screen="slideshow"
+    >
       Show Slideshow
     </button>
 
-    <button class="thermometer" data-screen="thermometer">
+    <button
+      class="thermometer"
+      data-screen="thermometer"
+    >
       Show Building Faith Together
     </button>
 
-    <button class="logout" id="logoutButton">
+    <button
+      class="automatic"
+      id="automaticButton"
+    >
+      Use Automatic Schedule
+    </button>
+
+    <button
+      class="logout"
+      id="logoutButton"
+    >
       Sign Out
     </button>
 
@@ -194,7 +231,8 @@
 
   const firebaseConfig = {
 
-    apiKey: "AIzaSyBXJxs6cFXJVCfDuFPhZFpK34N1HiHqMy8",
+    apiKey:
+      "AIzaSyBXJxs6cFXJVCfDuFPhZFpK34N1HiHqMy8",
 
     authDomain:
       "olg-kiosk-control.firebaseapp.com",
@@ -217,9 +255,7 @@
 
 
   const app = initializeApp(firebaseConfig);
-
   const database = getDatabase(app);
-
   const auth = getAuth(app);
 
 
@@ -235,6 +271,13 @@
   const currentScreen =
     document.getElementById("currentScreen");
 
+  const currentMode =
+    document.getElementById("currentMode");
+
+
+  // ==========================================
+  // LOGIN
+  // ==========================================
 
   document
     .getElementById("loginButton")
@@ -258,9 +301,9 @@
 
         message.textContent = "";
 
-      }
+      } catch (error) {
 
-      catch (error) {
+        console.error(error);
 
         message.textContent =
           "Unable to sign in. Check your email and password.";
@@ -269,6 +312,10 @@
 
     });
 
+
+  // ==========================================
+  // LOGOUT
+  // ==========================================
 
   document
     .getElementById("logoutButton")
@@ -279,26 +326,30 @@
     });
 
 
+  // ==========================================
+  // AUTH STATE
+  // ==========================================
+
   onAuthStateChanged(auth, (user) => {
 
     if (user) {
 
       loginBox.style.display = "none";
-
       controls.style.display = "block";
 
-    }
-
-    else {
+    } else {
 
       loginBox.style.display = "block";
-
       controls.style.display = "none";
 
     }
 
   });
 
+
+  // ==========================================
+  // MANUAL SCREEN BUTTONS
+  // ==========================================
 
   document
     .querySelectorAll("[data-screen]")
@@ -311,6 +362,13 @@
 
         try {
 
+          // Put kiosk into manual mode
+          await set(
+            ref(database, "kiosk/mode"),
+            "manual"
+          );
+
+          // Change the screen
           await set(
             ref(database, "kiosk/screen"),
             screen
@@ -323,9 +381,9 @@
             message.textContent = "";
           }, 2000);
 
-        }
+        } catch (error) {
 
-        catch (error) {
+          console.error(error);
 
           message.textContent =
             "Unable to change kiosk.";
@@ -337,6 +395,44 @@
     });
 
 
+  // ==========================================
+  // AUTOMATIC MODE BUTTON
+  // ==========================================
+
+  document
+    .getElementById("automaticButton")
+    .addEventListener("click", async () => {
+
+      try {
+
+        await set(
+          ref(database, "kiosk/mode"),
+          "automatic"
+        );
+
+        message.textContent =
+          "Automatic schedule enabled.";
+
+        setTimeout(() => {
+          message.textContent = "";
+        }, 2000);
+
+      } catch (error) {
+
+        console.error(error);
+
+        message.textContent =
+          "Unable to enable automatic schedule.";
+
+      }
+
+    });
+
+
+  // ==========================================
+  // CURRENT SCREEN DISPLAY
+  // ==========================================
+
   onValue(
     ref(database, "kiosk/screen"),
     (snapshot) => {
@@ -345,127 +441,58 @@
         snapshot.val() || "homepage";
 
       if (screen === "homepage") {
+
         currentScreen.textContent =
           "Homepage";
-      }
 
-      else if (screen === "slideshow") {
+      } else if (screen === "slideshow") {
+
         currentScreen.textContent =
           "Slideshow";
-      }
 
-      else if (screen === "thermometer") {
+      } else if (screen === "thermometer") {
+
         currentScreen.textContent =
           "Building Faith Together";
-      }
 
-      else {
+      } else {
+
         currentScreen.textContent =
           screen;
+
+      }
+
+    }
+  );
+
+
+  // ==========================================
+  // CURRENT MODE DISPLAY
+  // ==========================================
+
+  onValue(
+    ref(database, "kiosk/mode"),
+    (snapshot) => {
+
+      const mode =
+        snapshot.val() || "automatic";
+
+      if (mode === "manual") {
+
+        currentMode.textContent =
+          "Manual";
+
+      } else {
+
+        currentMode.textContent =
+          "Automatic";
+
       }
 
     }
   );
 
 </script>
-
-<script>
-  // ==========================================
-  // OLG AUTOMATIC MASS SCHEDULE
-  // Slideshow begins 1 hour before Mass.
-  // Homepage returns 30 minutes after Mass begins.
-  // ==========================================
-
-  const massSchedule = {
-    // Sunday
-    0: [
-      { hour: 7, minute: 30 },
-      { hour: 9, minute: 30 },
-      { hour: 11, minute: 30 },
-      { hour: 13, minute: 30 },
-      { hour: 15, minute: 30 }
-    ],
-
-    // Monday
-    1: [
-      { hour: 8, minute: 30 }
-    ],
-
-    // Tuesday
-    2: [
-      { hour: 8, minute: 30 },
-      { hour: 18, minute: 30 }
-    ],
-
-    // Wednesday
-    3: [
-      { hour: 8, minute: 30 },
-      { hour: 12, minute: 10 }
-    ],
-
-    // Thursday
-    4: [
-      { hour: 8, minute: 30 }
-    ],
-
-    // Friday
-    5: [
-      { hour: 8, minute: 30 }
-    ],
-
-    // Saturday
-    6: [
-      { hour: 8, minute: 30 },
-      { hour: 16, minute: 30 },
-      { hour: 18, minute: 30 }
-    ]
-  };
-
-  function getScheduledScreen() {
-    const now = new Date();
-    const today = massSchedule[now.getDay()] || [];
-
-    for (const mass of today) {
-      const massTime = new Date(now);
-      massTime.setHours(mass.hour, mass.minute, 0, 0);
-
-      const slideshowStart =
-        new Date(massTime.getTime() - 60 * 60 * 1000);
-
-      const slideshowEnd =
-        new Date(massTime.getTime() + 30 * 60 * 1000);
-
-      if (now >= slideshowStart && now < slideshowEnd) {
-        return "slideshow";
-      }
-    }
-
-    return "homepage";
-  }
-
-  async function applyAutomaticSchedule() {
-    try {
-      const scheduledScreen = getScheduledScreen();
-
-      await set(
-        ref(database, "kiosk/screen"),
-        scheduledScreen
-      );
-
-      console.log(
-        "Automatic schedule:",
-        scheduledScreen
-      );
-    } catch (error) {
-      console.error(
-        "Automatic schedule error:",
-        error
-      );
-    }
-  }
-
-  
-</script>  
 
 </body>
 </html>
