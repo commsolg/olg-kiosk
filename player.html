@@ -59,7 +59,8 @@
     import {
       getDatabase,
       ref,
-      onValue
+      onValue,
+      get
     } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
 
 
@@ -216,17 +217,41 @@ function getScheduledScreen() {
 
 
 // Apply schedule
-function applyAutomaticSchedule() {
+async function applyAutomaticSchedule() {
 
-  const scheduledScreen =
-    getScheduledScreen();
+  try {
 
-  console.log(
-    "Automatic kiosk schedule:",
-    scheduledScreen
-  );
+    const modeSnapshot = await get(
+      ref(database, "kiosk/mode")
+    );
 
-  showScreen(scheduledScreen);
+    const mode = modeSnapshot.val();
+
+    // If someone manually selected a screen,
+    // leave it alone.
+    if (mode === "manual") {
+      console.log("Manual mode — automatic schedule paused.");
+      return;
+    }
+
+    const scheduledScreen =
+      getScheduledScreen();
+
+    console.log(
+      "Automatic kiosk schedule:",
+      scheduledScreen
+    );
+
+    showScreen(scheduledScreen);
+
+  } catch (error) {
+
+    console.error(
+      "Automatic schedule error:",
+      error
+    );
+
+  }
 }
 
 
