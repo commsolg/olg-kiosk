@@ -144,50 +144,57 @@
     // ==========================================
     // MASS SCHEDULE
     // ==========================================
+    //
+    // type: "daily"
+    // 30 min before Mass → 15 min after start
+    //
+    // type: "weekend"
+    // 60 min before Mass → 30 min after start
+    //
 
     const massSchedule = {
 
       // Sunday
       0: [
-        "07:30",
-        "09:30",
-        "11:30",
-        "13:30",
-        "15:30"
+        { time: "07:30", type: "weekend" },
+        { time: "09:30", type: "weekend" },
+        { time: "11:30", type: "weekend" },
+        { time: "13:30", type: "weekend" },
+        { time: "15:30", type: "weekend" }
       ],
 
       // Monday
       1: [
-        "08:30"
+        { time: "08:30", type: "daily" }
       ],
 
       // Tuesday
       2: [
-        "08:30",
-        "18:30"
+        { time: "08:30", type: "daily" },
+        { time: "18:30", type: "daily" }
       ],
 
       // Wednesday
       3: [
-        "08:30",
-        "12:10"
+        { time: "08:30", type: "daily" },
+        { time: "12:10", type: "daily" }
       ],
 
       // Thursday
       4: [
-        "08:30"
+        { time: "08:30", type: "daily" }
       ],
 
       // Friday
       5: [
-        "08:30"
+        { time: "08:30", type: "daily" }
       ],
 
       // Saturday
       6: [
-        "08:30",
-        "16:30",
-        "18:30"
+        { time: "08:30", type: "daily" },
+        { time: "16:30", type: "weekend" },
+        { time: "18:30", type: "weekend" }
       ]
 
     };
@@ -215,28 +222,56 @@
       for (const mass of masses) {
 
         const [hour, minute] =
-          mass.split(":").map(Number);
+          mass.time.split(":").map(Number);
 
         const massMinutes =
           hour * 60 + minute;
 
-        const slideshowStart =
-          massMinutes - 60;
 
-        const slideshowEnd =
-          massMinutes + 30;
+        // Weekend Mass:
+        // slideshow 60 minutes before
+        // until 30 minutes after Mass begins
+
+        if (mass.type === "weekend") {
+
+          const slideshowStart =
+            massMinutes - 60;
+
+          const slideshowEnd =
+            massMinutes + 30;
+
+          if (
+            currentMinutes >= slideshowStart &&
+            currentMinutes < slideshowEnd
+          ) {
+
+            return "slideshow";
+
+          }
+
+        }
 
 
-        // Slideshow:
-        // 1 hour before Mass
-        // through 30 minutes after Mass begins
+        // Daily Mass:
+        // slideshow 30 minutes before
+        // until 15 minutes after Mass begins
 
-        if (
-          currentMinutes >= slideshowStart &&
-          currentMinutes < slideshowEnd
-        ) {
+        if (mass.type === "daily") {
 
-          return "slideshow";
+          const slideshowStart =
+            massMinutes - 30;
+
+          const slideshowEnd =
+            massMinutes + 15;
+
+          if (
+            currentMinutes >= slideshowStart &&
+            currentMinutes < slideshowEnd
+          ) {
+
+            return "slideshow";
+
+          }
 
         }
 
@@ -266,8 +301,9 @@
           modeSnapshot.val() || "automatic";
 
 
-        // If manual mode is active,
-        // Firebase controls the screen.
+        // MANUAL MODE
+        // Use whatever screen was selected
+        // from the phone control page.
 
         if (mode === "manual") {
 
@@ -286,7 +322,8 @@
         }
 
 
-        // Otherwise follow Mass schedule.
+        // AUTOMATIC MODE
+        // Follow the Mass schedule.
 
         const scheduledScreen =
           getScheduledScreen();
@@ -301,9 +338,14 @@
           error
         );
 
-        // Safe fallback
+
+        // Safe fallback:
+        // if nothing has loaded, show homepage.
+
         if (!currentScreen) {
+
           showScreen("homepage");
+
         }
 
       }
@@ -315,7 +357,7 @@
     // LIVE FIREBASE LISTENERS
     // ==========================================
 
-    // If mode changes, respond immediately.
+    // Respond immediately if mode changes.
 
     onValue(
       ref(database, "kiosk/mode"),
@@ -327,8 +369,8 @@
     );
 
 
-    // If a manual screen changes,
-    // respond immediately.
+    // Respond immediately when a manual
+    // screen is selected.
 
     onValue(
       ref(database, "kiosk/screen"),
@@ -371,11 +413,11 @@
     // START KIOSK
     // ==========================================
 
-    // Run immediately.
+    // Determine correct screen immediately.
     applyAutomaticSchedule();
 
 
-    // Re-check the Mass schedule every 30 seconds.
+    // Check schedule every 30 seconds.
     setInterval(
       applyAutomaticSchedule,
       30000
