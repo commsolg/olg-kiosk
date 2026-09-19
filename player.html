@@ -116,29 +116,131 @@
     }
 
 
-    const screenRef = ref(database, "kiosk/screen");
+    // ---------------------------------------
+// AUTOMATIC MASS SCHEDULE
+// ---------------------------------------
 
-    onValue(
-      screenRef,
+const massSchedule = {
+  0: [ // Sunday
+    "07:30",
+    "09:30",
+    "11:30",
+    "13:30",
+    "15:30"
+  ],
 
-      (snapshot) => {
+  1: [ // Monday
+    "08:30"
+  ],
 
-        const selectedScreen = snapshot.val() || "homepage";
+  2: [ // Tuesday
+    "08:30",
+    "18:30"
+  ],
 
-        console.log("Kiosk command:", selectedScreen);
+  3: [ // Wednesday
+    "08:30",
+    "12:10"
+  ],
 
-        showScreen(selectedScreen);
+  4: [ // Thursday
+    "08:30"
+  ],
 
-      },
+  5: [ // Friday
+    "08:30"
+  ],
 
-      (error) => {
+  6: [ // Saturday
+    "08:30",
+    "16:30",
+    "18:30"
+  ]
+};
 
-        console.error("Firebase error:", error);
 
-        status.textContent = "Unable to connect to kiosk control.";
+// Determine what should be displayed
+function getScheduledScreen() {
 
-      }
-    );
+  const now = new Date();
+
+  const day = now.getDay();
+
+  const currentMinutes =
+    now.getHours() * 60 +
+    now.getMinutes();
+
+  const masses = massSchedule[day] || [];
+
+  for (const mass of masses) {
+
+    const [hour, minute] =
+      mass.split(":").map(Number);
+
+    const massMinutes =
+      hour * 60 + minute;
+
+    const slideshowStart =
+      massMinutes - 60;
+
+    const homepageStart =
+      massMinutes + 30;
+
+    const slideshowReturn =
+      massMinutes + 60;
+
+
+    // 1 hour BEFORE Mass through
+    // 30 minutes AFTER Mass begins
+    if (
+      currentMinutes >= slideshowStart &&
+      currentMinutes < homepageStart
+    ) {
+      return "slideshow";
+    }
+
+
+    // 30–60 minutes after Mass begins
+    if (
+      currentMinutes >= homepageStart &&
+      currentMinutes < slideshowReturn
+    ) {
+      return "homepage";
+    }
+  }
+
+
+  // Normal display outside Mass windows
+  return "homepage";
+}
+
+
+// Apply schedule
+function applyAutomaticSchedule() {
+
+  const scheduledScreen =
+    getScheduledScreen();
+
+  console.log(
+    "Automatic kiosk schedule:",
+    scheduledScreen
+  );
+
+  showScreen(scheduledScreen);
+}
+
+
+// Run immediately when kiosk loads
+applyAutomaticSchedule();
+
+
+// Check every 30 seconds
+setInterval(
+  applyAutomaticSchedule,
+  30000
+);
+
+    
 
   </script>
 
