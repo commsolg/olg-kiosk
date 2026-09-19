@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OLG Kiosk Control</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f8f6f1;
+      color: #3a3e42;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    .panel {
+      width: 100%;
+      max-width: 620px;
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.12);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+    }
+
+    .subtitle {
+      color: #777;
+      margin-bottom: 30px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 17px;
+      margin-top: 12px;
+      border: 0;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .login {
+      background: #584d52;
+      color: white;
+    }
+
+    .homepage {
+      background: #3a3e42;
+      color: white;
+    }
+
+    .slideshow {
+      background: #a48868;
+      color: white;
+    }
+
+    .thermometer {
+      background: #218686;
+      color: white;
+    }
+
+    .logout {
+      background: #eee;
+      color: #555;
+      margin-top: 25px;
+    }
+
+    #controls {
+      display: none;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 18px;
+      font-weight: bold;
+    }
+
+    .current {
+      background: #f1ede4;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .current strong {
+      display: block;
+      font-size: 22px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="panel">
+
+  <h1>OLG Kiosk Control</h1>
+  <div class="subtitle">Our Lady of Guadalupe · Helotes, Texas</div>
+
+  <div id="loginBox">
+
+    <input
+      id="email"
+      type="email"
+      placeholder="Email"
+    >
+
+    <input
+      id="password"
+      type="password"
+      placeholder="Password"
+    >
+
+    <button class="login" id="loginButton">
+      Sign In
+    </button>
+
+  </div>
+
+  <div id="controls">
+
+    <div class="current">
+      Currently displaying
+      <strong id="currentScreen">Loading...</strong>
+    </div>
+
+    <button class="homepage" data-screen="homepage">
+      Show Homepage
+    </button>
+
+    <button class="slideshow" data-screen="slideshow">
+      Show Slideshow
+    </button>
+
+    <button class="thermometer" data-screen="thermometer">
+      Show Building Faith Together
+    </button>
+
+    <button class="logout" id="logoutButton">
+      Sign Out
+    </button>
+
+  </div>
+
+  <div id="message"></div>
+
+</div>
+
+
+<script type="module">
+
+  import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+  import {
+    getDatabase,
+    ref,
+    set,
+    onValue
+  }
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+  }
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+  const firebaseConfig = {
+
+    apiKey: "AIzaSyBXJxs6cFXJVCfDuFPhZFpK34N1HiHqMy8",
+
+    authDomain:
+      "olg-kiosk-control.firebaseapp.com",
+
+    databaseURL:
+      "https://olg-kiosk-control-default-rtdb.firebaseio.com",
+
+    projectId:
+      "olg-kiosk-control",
+
+    storageBucket:
+      "olg-kiosk-control.firebasestorage.app",
+
+    messagingSenderId:
+      "1060266581212",
+
+    appId:
+      "1:1060266581212:web:0475a741bc19fb45f9e819"
+  };
+
+
+  const app = initializeApp(firebaseConfig);
+
+  const database = getDatabase(app);
+
+  const auth = getAuth(app);
+
+
+  const loginBox =
+    document.getElementById("loginBox");
+
+  const controls =
+    document.getElementById("controls");
+
+  const message =
+    document.getElementById("message");
+
+  const currentScreen =
+    document.getElementById("currentScreen");
+
+
+  document
+    .getElementById("loginButton")
+    .addEventListener("click", async () => {
+
+      const email =
+        document.getElementById("email").value;
+
+      const password =
+        document.getElementById("password").value;
+
+      message.textContent = "Signing in...";
+
+      try {
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        message.textContent = "";
+
+      }
+
+      catch (error) {
+
+        message.textContent =
+          "Unable to sign in. Check your email and password.";
+
+      }
+
+    });
+
+
+  document
+    .getElementById("logoutButton")
+    .addEventListener("click", async () => {
+
+      await signOut(auth);
+
+    });
+
+
+  onAuthStateChanged(auth, (user) => {
+
+    if (user) {
+
+      loginBox.style.display = "none";
+
+      controls.style.display = "block";
+
+    }
+
+    else {
+
+      loginBox.style.display = "block";
+
+      controls.style.display = "none";
+
+    }
+
+  });
+
+
+  document
+    .querySelectorAll("[data-screen]")
+    .forEach(button => {
+
+      button.addEventListener("click", async () => {
+
+        const screen =
+          button.dataset.screen;
+
+        try {
+
+          await set(
+            ref(database, "kiosk/screen"),
+            screen
+          );
+
+          message.textContent =
+            "Kiosk changed successfully.";
+
+          setTimeout(() => {
+            message.textContent = "";
+          }, 2000);
+
+        }
+
+        catch (error) {
+
+          message.textContent =
+            "Unable to change kiosk.";
+
+        }
+
+      });
+
+    });
+
+
+  onValue(
+    ref(database, "kiosk/screen"),
+    (snapshot) => {
+
+      const screen =
+        snapshot.val() || "homepage";
+
+      if (screen === "homepage") {
+        currentScreen.textContent =
+          "Homepage";
+      }
+
+      else if (screen === "slideshow") {
+        currentScreen.textContent =
+          "Slideshow";
+      }
+
+      else if (screen === "thermometer") {
+        currentScreen.textContent =
+          "Building Faith Together";
+      }
+
+      else {
+        currentScreen.textContent =
+          screen;
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
