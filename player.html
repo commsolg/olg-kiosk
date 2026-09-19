@@ -61,8 +61,13 @@
       ref,
       onValue,
       get
-    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+    }
+    from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
 
+
+    // ==========================================
+    // FIREBASE
+    // ==========================================
 
     const firebaseConfig = {
       apiKey: "AIzaSyBXJxs6cFXJVCfDuFPhZFpK34N1HiHqMy8",
@@ -78,6 +83,11 @@
     const app = initializeApp(firebaseConfig);
     const database = getDatabase(app);
 
+
+    // ==========================================
+    // KIOSK PAGES
+    // ==========================================
+
     const pages = {
 
       homepage:
@@ -92,21 +102,35 @@
     };
 
 
-    const screen = document.getElementById("screen");
-    const status = document.getElementById("status");
+    const screen =
+      document.getElementById("screen");
+
+    const status =
+      document.getElementById("status");
 
     let currentScreen = "";
 
 
+    // ==========================================
+    // DISPLAY A SCREEN
+    // ==========================================
+
     function showScreen(name) {
 
-      const url = pages[name] || pages.homepage;
+      const selected =
+        pages[name] ? name : "homepage";
 
-      if (currentScreen === name) {
+      const url =
+        pages[selected];
+
+      if (currentScreen === selected) {
         return;
       }
 
-      currentScreen = name;
+      currentScreen = selected;
+
+      status.style.display = "flex";
+      status.textContent = "Loading OLG Kiosk...";
 
       screen.src = url;
 
@@ -117,155 +141,246 @@
     }
 
 
-    // ---------------------------------------
-// AUTOMATIC MASS SCHEDULE
-// ---------------------------------------
+    // ==========================================
+    // MASS SCHEDULE
+    // ==========================================
 
-const massSchedule = {
-  0: [ // Sunday
-    "07:30",
-    "09:30",
-    "11:30",
-    "13:30",
-    "15:30"
-  ],
+    const massSchedule = {
 
-  1: [ // Monday
-    "08:30"
-  ],
+      // Sunday
+      0: [
+        "07:30",
+        "09:30",
+        "11:30",
+        "13:30",
+        "15:30"
+      ],
 
-  2: [ // Tuesday
-    "08:30",
-    "18:30"
-  ],
+      // Monday
+      1: [
+        "08:30"
+      ],
 
-  3: [ // Wednesday
-    "08:30",
-    "12:10"
-  ],
+      // Tuesday
+      2: [
+        "08:30",
+        "18:30"
+      ],
 
-  4: [ // Thursday
-    "08:30"
-  ],
+      // Wednesday
+      3: [
+        "08:30",
+        "12:10"
+      ],
 
-  5: [ // Friday
-    "08:30"
-  ],
+      // Thursday
+      4: [
+        "08:30"
+      ],
 
-  6: [ // Saturday
-    "08:30",
-    "16:30",
-    "18:30"
-  ]
-};
+      // Friday
+      5: [
+        "08:30"
+      ],
 
+      // Saturday
+      6: [
+        "08:30",
+        "16:30",
+        "18:30"
+      ]
 
-// Determine what should be displayed
-function getScheduledScreen() {
-
-  const now = new Date();
-
-  const day = now.getDay();
-
-  const currentMinutes =
-    now.getHours() * 60 +
-    now.getMinutes();
-
-  const masses = massSchedule[day] || [];
-
-  for (const mass of masses) {
-
-    const [hour, minute] =
-      mass.split(":").map(Number);
-
-    const massMinutes =
-      hour * 60 + minute;
-
-    const slideshowStart =
-      massMinutes - 60;
-
-    const homepageStart =
-      massMinutes + 30;
-
-    const slideshowReturn =
-      massMinutes + 60;
+    };
 
 
-    // 1 hour BEFORE Mass through
-    // 30 minutes AFTER Mass begins
-    if (
-      currentMinutes >= slideshowStart &&
-      currentMinutes < homepageStart
-    ) {
-      return "slideshow";
-    }
+    // ==========================================
+    // DETERMINE AUTOMATIC SCREEN
+    // ==========================================
+
+    function getScheduledScreen() {
+
+      const now = new Date();
+
+      const day =
+        now.getDay();
+
+      const currentMinutes =
+        now.getHours() * 60 +
+        now.getMinutes();
+
+      const masses =
+        massSchedule[day] || [];
 
 
-    // 30–60 minutes after Mass begins
-    if (
-      currentMinutes >= homepageStart &&
-      currentMinutes < slideshowReturn
-    ) {
+      for (const mass of masses) {
+
+        const [hour, minute] =
+          mass.split(":").map(Number);
+
+        const massMinutes =
+          hour * 60 + minute;
+
+        const slideshowStart =
+          massMinutes - 60;
+
+        const slideshowEnd =
+          massMinutes + 30;
+
+
+        // Slideshow:
+        // 1 hour before Mass
+        // through 30 minutes after Mass begins
+
+        if (
+          currentMinutes >= slideshowStart &&
+          currentMinutes < slideshowEnd
+        ) {
+
+          return "slideshow";
+
+        }
+
+      }
+
+
+      // Everywhere else:
       return "homepage";
-    }
-  }
 
-
-  // Normal display outside Mass windows
-  return "homepage";
-}
-
-
-// Apply schedule
-async function applyAutomaticSchedule() {
-
-  try {
-
-    const modeSnapshot = await get(
-      ref(database, "kiosk/mode")
-    );
-
-    const mode = modeSnapshot.val();
-
-    // If someone manually selected a screen,
-    // leave it alone.
-    if (mode === "manual") {
-      console.log("Manual mode — automatic schedule paused.");
-      return;
     }
 
-    const scheduledScreen =
-      getScheduledScreen();
 
-    console.log(
-      "Automatic kiosk schedule:",
-      scheduledScreen
+    // ==========================================
+    // APPLY AUTOMATIC SCHEDULE
+    // ==========================================
+
+    async function applyAutomaticSchedule() {
+
+      try {
+
+        const modeSnapshot =
+          await get(
+            ref(database, "kiosk/mode")
+          );
+
+        const mode =
+          modeSnapshot.val() || "automatic";
+
+
+        // If manual mode is active,
+        // Firebase controls the screen.
+
+        if (mode === "manual") {
+
+          const screenSnapshot =
+            await get(
+              ref(database, "kiosk/screen")
+            );
+
+          const manualScreen =
+            screenSnapshot.val() || "homepage";
+
+          showScreen(manualScreen);
+
+          return;
+
+        }
+
+
+        // Otherwise follow Mass schedule.
+
+        const scheduledScreen =
+          getScheduledScreen();
+
+        showScreen(scheduledScreen);
+
+
+      } catch (error) {
+
+        console.error(
+          "Kiosk schedule error:",
+          error
+        );
+
+        // Safe fallback
+        if (!currentScreen) {
+          showScreen("homepage");
+        }
+
+      }
+
+    }
+
+
+    // ==========================================
+    // LIVE FIREBASE LISTENERS
+    // ==========================================
+
+    // If mode changes, respond immediately.
+
+    onValue(
+      ref(database, "kiosk/mode"),
+      () => {
+
+        applyAutomaticSchedule();
+
+      }
     );
 
-    showScreen(scheduledScreen);
 
-  } catch (error) {
+    // If a manual screen changes,
+    // respond immediately.
 
-    console.error(
-      "Automatic schedule error:",
-      error
+    onValue(
+      ref(database, "kiosk/screen"),
+      async (snapshot) => {
+
+        try {
+
+          const modeSnapshot =
+            await get(
+              ref(database, "kiosk/mode")
+            );
+
+          const mode =
+            modeSnapshot.val() || "automatic";
+
+
+          if (mode === "manual") {
+
+            const selectedScreen =
+              snapshot.val() || "homepage";
+
+            showScreen(selectedScreen);
+
+          }
+
+        } catch (error) {
+
+          console.error(
+            "Manual screen error:",
+            error
+          );
+
+        }
+
+      }
     );
 
-  }
-}
+
+    // ==========================================
+    // START KIOSK
+    // ==========================================
+
+    // Run immediately.
+    applyAutomaticSchedule();
 
 
-// Run immediately when kiosk loads
-applyAutomaticSchedule();
+    // Re-check the Mass schedule every 30 seconds.
+    setInterval(
+      applyAutomaticSchedule,
+      30000
+    );
 
-
-// Check every 30 seconds
-setInterval(
-  applyAutomaticSchedule,
-  30000
-);
-
-    
 
   </script>
 
