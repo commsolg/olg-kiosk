@@ -369,5 +369,107 @@
 
 </script>
 
+<script>
+  // ==========================================
+  // OLG AUTOMATIC MASS SCHEDULE
+  // Slideshow begins 1 hour before Mass.
+  // Homepage returns 30 minutes after Mass begins.
+  // ==========================================
+
+  const massSchedule = {
+    // Sunday
+    0: [
+      { hour: 7, minute: 30 },
+      { hour: 9, minute: 30 },
+      { hour: 11, minute: 30 },
+      { hour: 13, minute: 30 },
+      { hour: 15, minute: 30 }
+    ],
+
+    // Monday
+    1: [
+      { hour: 8, minute: 30 }
+    ],
+
+    // Tuesday
+    2: [
+      { hour: 8, minute: 30 },
+      { hour: 18, minute: 30 }
+    ],
+
+    // Wednesday
+    3: [
+      { hour: 8, minute: 30 },
+      { hour: 12, minute: 10 }
+    ],
+
+    // Thursday
+    4: [
+      { hour: 8, minute: 30 }
+    ],
+
+    // Friday
+    5: [
+      { hour: 8, minute: 30 }
+    ],
+
+    // Saturday
+    6: [
+      { hour: 8, minute: 30 },
+      { hour: 16, minute: 30 },
+      { hour: 18, minute: 30 }
+    ]
+  };
+
+  function getScheduledScreen() {
+    const now = new Date();
+    const today = massSchedule[now.getDay()] || [];
+
+    for (const mass of today) {
+      const massTime = new Date(now);
+      massTime.setHours(mass.hour, mass.minute, 0, 0);
+
+      const slideshowStart =
+        new Date(massTime.getTime() - 60 * 60 * 1000);
+
+      const slideshowEnd =
+        new Date(massTime.getTime() + 30 * 60 * 1000);
+
+      if (now >= slideshowStart && now < slideshowEnd) {
+        return "slideshow";
+      }
+    }
+
+    return "homepage";
+  }
+
+  async function applyAutomaticSchedule() {
+    try {
+      const scheduledScreen = getScheduledScreen();
+
+      await set(
+        ref(database, "kiosk/screen"),
+        scheduledScreen
+      );
+
+      console.log(
+        "Automatic schedule:",
+        scheduledScreen
+      );
+    } catch (error) {
+      console.error(
+        "Automatic schedule error:",
+        error
+      );
+    }
+  }
+
+  // Check immediately when control page opens
+  applyAutomaticSchedule();
+
+  // Check again every 30 seconds
+  setInterval(applyAutomaticSchedule, 30000);
+</script>  
+
 </body>
 </html>
