@@ -97,7 +97,7 @@
         "https://docs.google.com/presentation/d/e/2PACX-1vTQxxSHZe9BlXLFHPyk7HStdfkBI_p2fvKi2zYDUV6zz4V5FOZb-CNzHaXg8FeyDzeaPGpEUal26u_g/embed?start=true&loop=true&delayms=15000",
 
       thermometer:
-        "https://script.google.com/macros/s/AKfycbxmqh5wvGYeaxEqPv-RtquLgrGdT-rFV1nEAcmvMB64vF904yFyceCzuowvC5zRwop8vA/exec"
+        "https://script.google.com/macros/s/AKfycbwPN6qTrEB2gXbYoceUsNZG6xSfBAQXzJ3XY8aYDHZZn2iooqsAUtArrR_UoIPADP58Lw/exec"
 
     };
 
@@ -144,13 +144,6 @@
     // ==========================================
     // MASS SCHEDULE
     // ==========================================
-    //
-    // type: "daily"
-    // 30 min before Mass → 15 min after start
-    //
-    // type: "weekend"
-    // 60 min before Mass → 30 min after start
-    //
 
     const massSchedule = {
 
@@ -228,10 +221,6 @@
           hour * 60 + minute;
 
 
-        // Weekend Mass:
-        // slideshow 60 minutes before
-        // until 30 minutes after Mass begins
-
         if (mass.type === "weekend") {
 
           const slideshowStart =
@@ -244,17 +233,10 @@
             currentMinutes >= slideshowStart &&
             currentMinutes < slideshowEnd
           ) {
-
             return "slideshow";
-
           }
-
         }
 
-
-        // Daily Mass:
-        // slideshow 30 minutes before
-        // until 15 minutes after Mass begins
 
         if (mass.type === "daily") {
 
@@ -268,19 +250,13 @@
             currentMinutes >= slideshowStart &&
             currentMinutes < slideshowEnd
           ) {
-
             return "slideshow";
-
           }
-
         }
-
       }
 
 
-      // Everywhere else:
       return "homepage";
-
     }
 
 
@@ -301,10 +277,6 @@
           modeSnapshot.val() || "automatic";
 
 
-        // MANUAL MODE
-        // Use whatever screen was selected
-        // from the phone control page.
-
         if (mode === "manual") {
 
           const screenSnapshot =
@@ -318,12 +290,8 @@
           showScreen(manualScreen);
 
           return;
-
         }
 
-
-        // AUTOMATIC MODE
-        // Follow the Mass schedule.
 
         const scheduledScreen =
           getScheduledScreen();
@@ -339,13 +307,8 @@
         );
 
 
-        // Safe fallback:
-        // if nothing has loaded, show homepage.
-
         if (!currentScreen) {
-
           showScreen("homepage");
-
         }
 
       }
@@ -357,20 +320,13 @@
     // LIVE FIREBASE LISTENERS
     // ==========================================
 
-    // Respond immediately if mode changes.
-
     onValue(
       ref(database, "kiosk/mode"),
       () => {
-
         applyAutomaticSchedule();
-
       }
     );
 
-
-    // Respond immediately when a manual
-    // screen is selected.
 
     onValue(
       ref(database, "kiosk/screen"),
@@ -413,11 +369,9 @@
     // START KIOSK
     // ==========================================
 
-    // Determine correct screen immediately.
     applyAutomaticSchedule();
 
 
-    // Check schedule every 30 seconds.
     setInterval(
       applyAutomaticSchedule,
       30000
