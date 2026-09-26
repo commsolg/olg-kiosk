@@ -136,9 +136,7 @@
     </div>
 
 
-    <!-- ======================================
-         LOGIN
-         ====================================== -->
+    <!-- LOGIN -->
 
     <div id="loginBox">
 
@@ -164,9 +162,7 @@
     </div>
 
 
-    <!-- ======================================
-         KIOSK CONTROLS
-         ====================================== -->
+    <!-- CONTROLS -->
 
     <div id="controls">
 
@@ -266,7 +262,7 @@
 
 
     // ==========================================
-    // FIREBASE CONFIGURATION
+    // FIREBASE CONFIG
     // ==========================================
 
     const firebaseConfig = {
@@ -306,7 +302,7 @@
 
 
     // ==========================================
-    // PAGE ELEMENTS
+    // ELEMENTS
     // ==========================================
 
     const loginBox =
@@ -323,6 +319,29 @@
 
     const currentMode =
       document.getElementById("currentMode");
+
+
+    // ==========================================
+    // HELPER:
+    // FRIENDLY SCREEN NAME
+    // ==========================================
+
+    function getScreenName(screen) {
+
+      if (screen === "homepage") {
+        return "Homepage";
+      }
+
+      if (screen === "slideshow") {
+        return "Slideshow";
+      }
+
+      if (screen === "thermometer") {
+        return "Building Faith Together";
+      }
+
+      return screen || "Homepage";
+    }
 
 
     // ==========================================
@@ -427,9 +446,16 @@
     // MANUAL SCREEN BUTTONS
     // ==========================================
     //
-    // Pressing Homepage, Slideshow, or
-    // Building Faith Together puts the kiosk
-    // into MANUAL mode.
+    // IMPORTANT:
+    //
+    // When a manual button is pressed we update:
+    //
+    // 1. kiosk/screen
+    // 2. kiosk/mode
+    // 3. kiosk/currentScreen
+    //
+    // This keeps the control panel and the
+    // physical kiosk synchronized.
     // ==========================================
 
     document
@@ -445,11 +471,13 @@
                 button.dataset.screen;
 
 
+              message.textContent =
+                "Changing kiosk...";
+
+
               try {
 
-                // First save the screen that
-                // should be displayed.
-
+                // Save requested screen
                 await set(
                   ref(
                     database,
@@ -459,9 +487,7 @@
                 );
 
 
-                // Then put the kiosk into
-                // manual mode.
-
+                // Put kiosk into manual mode
                 await set(
                   ref(
                     database,
@@ -469,6 +495,29 @@
                   ),
                   "manual"
                 );
+
+
+                // Immediately update the
+                // currently-displaying status.
+                await set(
+                  ref(
+                    database,
+                    "kiosk/currentScreen"
+                  ),
+                  selectedScreen
+                );
+
+
+                // Immediately update the text
+                // on this control page too.
+                currentScreen.textContent =
+                  getScreenName(
+                    selectedScreen
+                  );
+
+
+                currentMode.textContent =
+                  "Manual";
 
 
                 message.textContent =
@@ -503,12 +552,12 @@
 
 
     // ==========================================
-    // AUTOMATIC MODE BUTTON
+    // AUTOMATIC MODE
     // ==========================================
     //
-    // Automatic mode tells player.html to
-    // determine the correct screen based on
-    // the San Antonio Mass schedule.
+    // player.html will calculate the correct
+    // screen using San Antonio time and then
+    // update kiosk/currentScreen.
     // ==========================================
 
     document
@@ -516,6 +565,10 @@
       .addEventListener(
         "click",
         async () => {
+
+          message.textContent =
+            "Enabling automatic schedule...";
+
 
           try {
 
@@ -526,6 +579,10 @@
               ),
               "automatic"
             );
+
+
+            currentMode.textContent =
+              "Automatic";
 
 
             message.textContent =
@@ -557,21 +614,11 @@
 
 
     // ==========================================
-    // CURRENT SCREEN DISPLAY
+    // LIVE CURRENT SCREEN
     // ==========================================
     //
-    // IMPORTANT:
-    //
-    // We read "currentScreen" here instead
-    // of "screen".
-    //
-    // kiosk/screen =
-    // requested MANUAL screen
-    //
-    // kiosk/currentScreen =
-    // screen the kiosk is ACTUALLY displaying
-    //
-    // player.html updates currentScreen.
+    // This is the ACTUAL screen being reported
+    // by player.html.
     // ==========================================
 
     onValue(
@@ -588,42 +635,10 @@
           "homepage";
 
 
-        if (
-          displayedScreen ===
-          "homepage"
-        ) {
-
-          currentScreen.textContent =
-            "Homepage";
-
-        }
-
-        else if (
-          displayedScreen ===
-          "slideshow"
-        ) {
-
-          currentScreen.textContent =
-            "Slideshow";
-
-        }
-
-        else if (
-          displayedScreen ===
-          "thermometer"
-        ) {
-
-          currentScreen.textContent =
-            "Building Faith Together";
-
-        }
-
-        else {
-
-          currentScreen.textContent =
-            displayedScreen;
-
-        }
+        currentScreen.textContent =
+          getScreenName(
+            displayedScreen
+          );
 
       }
 
@@ -631,7 +646,7 @@
 
 
     // ==========================================
-    // CURRENT MODE DISPLAY
+    // LIVE CURRENT MODE
     // ==========================================
 
     onValue(
@@ -648,10 +663,7 @@
           "automatic";
 
 
-        if (
-          mode ===
-          "manual"
-        ) {
+        if (mode === "manual") {
 
           currentMode.textContent =
             "Manual";
