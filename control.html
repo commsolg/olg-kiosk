@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>OLG Kiosk Control</title>
 
   <style>
@@ -126,373 +127,550 @@
 
 <body>
 
-<div class="panel">
+  <div class="panel">
 
-  <h1>OLG Kiosk Control</h1>
-  <div class="subtitle">
-    Our Lady of Guadalupe · Helotes, Texas
-  </div>
+    <h1>OLG Kiosk Control</h1>
 
-  <div id="loginBox">
-
-    <input
-      id="email"
-      type="email"
-      placeholder="Email"
-    >
-
-    <input
-      id="password"
-      type="password"
-      placeholder="Password"
-    >
-
-    <button class="login" id="loginButton">
-      Sign In
-    </button>
-
-  </div>
-
-  <div id="controls">
-
-    <div class="current">
-      Currently displaying
-      <strong id="currentScreen">Loading...</strong>
-
-      <div class="mode">
-        Mode:
-        <span id="currentMode">Loading...</span>
-      </div>
+    <div class="subtitle">
+      Our Lady of Guadalupe · Helotes, Texas
     </div>
 
-    <button
-      class="homepage"
-      data-screen="homepage"
-    >
-      Show Homepage
-    </button>
 
-    <button
-      class="slideshow"
-      data-screen="slideshow"
-    >
-      Show Slideshow
-    </button>
+    <!-- ======================================
+         LOGIN
+         ====================================== -->
 
-    <button
-      class="thermometer"
-      data-screen="thermometer"
-    >
-      Show Building Faith Together
-    </button>
+    <div id="loginBox">
 
-    <button
-      class="automatic"
-      id="automaticButton"
-    >
-      Use Automatic Schedule
-    </button>
+      <input
+        id="email"
+        type="email"
+        placeholder="Email"
+      >
 
-    <button
-      class="logout"
-      id="logoutButton"
-    >
-      Sign Out
-    </button>
+      <input
+        id="password"
+        type="password"
+        placeholder="Password"
+      >
+
+      <button
+        class="login"
+        id="loginButton"
+      >
+        Sign In
+      </button>
+
+    </div>
+
+
+    <!-- ======================================
+         KIOSK CONTROLS
+         ====================================== -->
+
+    <div id="controls">
+
+      <div class="current">
+
+        Currently displaying
+
+        <strong id="currentScreen">
+          Loading...
+        </strong>
+
+        <div class="mode">
+          Mode:
+          <span id="currentMode">
+            Loading...
+          </span>
+        </div>
+
+      </div>
+
+
+      <button
+        class="homepage"
+        data-screen="homepage"
+      >
+        Show Homepage
+      </button>
+
+
+      <button
+        class="slideshow"
+        data-screen="slideshow"
+      >
+        Show Slideshow
+      </button>
+
+
+      <button
+        class="thermometer"
+        data-screen="thermometer"
+      >
+        Show Building Faith Together
+      </button>
+
+
+      <button
+        class="automatic"
+        id="automaticButton"
+      >
+        Use Automatic Schedule
+      </button>
+
+
+      <button
+        class="logout"
+        id="logoutButton"
+      >
+        Sign Out
+      </button>
+
+    </div>
+
+
+    <div id="message"></div>
 
   </div>
 
-  <div id="message"></div>
 
-</div>
+  <script type="module">
 
+    // ==========================================
+    // FIREBASE IMPORTS
+    // ==========================================
 
-<script type="module">
-
-  import { initializeApp }
-  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
-  import {
-    getDatabase,
-    ref,
-    set,
-    onValue
-  }
-  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
-
-  import {
-    getAuth,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged
-  }
-  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-
-  const firebaseConfig = {
-
-    apiKey:
-      "AIzaSyBXJxs6cFXJVCfDuFPhZFpK34N1HiHqMy8",
-
-    authDomain:
-      "olg-kiosk-control.firebaseapp.com",
-
-    databaseURL:
-      "https://olg-kiosk-control-default-rtdb.firebaseio.com",
-
-    projectId:
-      "olg-kiosk-control",
-
-    storageBucket:
-      "olg-kiosk-control.firebasestorage.app",
-
-    messagingSenderId:
-      "1060266581212",
-
-    appId:
-      "1:1060266581212:web:0475a741bc19fb45f9e819"
-  };
-
-
-  const app = initializeApp(firebaseConfig);
-  const database = getDatabase(app);
-  const auth = getAuth(app);
-
-
-  const loginBox =
-    document.getElementById("loginBox");
-
-  const controls =
-    document.getElementById("controls");
-
-  const message =
-    document.getElementById("message");
-
-  const currentScreen =
-    document.getElementById("currentScreen");
-
-  const currentMode =
-    document.getElementById("currentMode");
-
-
-  // ==========================================
-  // LOGIN
-  // ==========================================
-
-  document
-    .getElementById("loginButton")
-    .addEventListener("click", async () => {
-
-      const email =
-        document.getElementById("email").value;
-
-      const password =
-        document.getElementById("password").value;
-
-      message.textContent = "Signing in...";
-
-      try {
-
-        await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-
-        message.textContent = "";
-
-      } catch (error) {
-
-        console.error(error);
-
-        message.textContent =
-          "Unable to sign in. Check your email and password.";
-
-      }
-
-    });
-
-
-  // ==========================================
-  // LOGOUT
-  // ==========================================
-
-  document
-    .getElementById("logoutButton")
-    .addEventListener("click", async () => {
-
-      await signOut(auth);
-
-    });
-
-
-  // ==========================================
-  // AUTH STATE
-  // ==========================================
-
-  onAuthStateChanged(auth, (user) => {
-
-    if (user) {
-
-      loginBox.style.display = "none";
-      controls.style.display = "block";
-
-    } else {
-
-      loginBox.style.display = "block";
-      controls.style.display = "none";
-
+    import {
+      initializeApp
     }
+    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
-  });
+
+    import {
+      getDatabase,
+      ref,
+      set,
+      onValue
+    }
+    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 
-  // ==========================================
-  // MANUAL SCREEN BUTTONS
-  // ==========================================
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-  document
-    .querySelectorAll("[data-screen]")
-    .forEach(button => {
 
-      button.addEventListener("click", async () => {
+    // ==========================================
+    // FIREBASE CONFIGURATION
+    // ==========================================
 
-        const screen =
-          button.dataset.screen;
+    const firebaseConfig = {
 
-        try {
+      apiKey:
+        "AIzaSyBXJxs6cFXJVCfDuFPhZFpK34N1HiHqMy8",
 
-          // Put kiosk into manual mode
-          await set(
-            ref(database, "kiosk/mode"),
-            "manual"
-          );
+      authDomain:
+        "olg-kiosk-control.firebaseapp.com",
 
-          // Change the screen
-          await set(
-            ref(database, "kiosk/screen"),
-            screen
-          );
+      databaseURL:
+        "https://olg-kiosk-control-default-rtdb.firebaseio.com",
+
+      projectId:
+        "olg-kiosk-control",
+
+      storageBucket:
+        "olg-kiosk-control.firebasestorage.app",
+
+      messagingSenderId:
+        "1060266581212",
+
+      appId:
+        "1:1060266581212:web:0475a741bc19fb45f9e819"
+
+    };
+
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const database =
+      getDatabase(app);
+
+    const auth =
+      getAuth(app);
+
+
+    // ==========================================
+    // PAGE ELEMENTS
+    // ==========================================
+
+    const loginBox =
+      document.getElementById("loginBox");
+
+    const controls =
+      document.getElementById("controls");
+
+    const message =
+      document.getElementById("message");
+
+    const currentScreen =
+      document.getElementById("currentScreen");
+
+    const currentMode =
+      document.getElementById("currentMode");
+
+
+    // ==========================================
+    // LOGIN
+    // ==========================================
+
+    document
+      .getElementById("loginButton")
+      .addEventListener(
+        "click",
+        async () => {
+
+          const email =
+            document
+              .getElementById("email")
+              .value;
+
+          const password =
+            document
+              .getElementById("password")
+              .value;
+
 
           message.textContent =
-            "Kiosk changed successfully.";
+            "Signing in...";
 
-          setTimeout(() => {
+
+          try {
+
+            await signInWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+
             message.textContent = "";
-          }, 2000);
 
-        } catch (error) {
+          }
 
-          console.error(error);
+          catch (error) {
 
-          message.textContent =
-            "Unable to change kiosk.";
+            console.error(error);
+
+            message.textContent =
+              "Unable to sign in. Check your email and password.";
+
+          }
+
+        }
+      );
+
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
+
+    document
+      .getElementById("logoutButton")
+      .addEventListener(
+        "click",
+        async () => {
+
+          await signOut(auth);
+
+        }
+      );
+
+
+    // ==========================================
+    // AUTH STATE
+    // ==========================================
+
+    onAuthStateChanged(
+      auth,
+      (user) => {
+
+        if (user) {
+
+          loginBox.style.display =
+            "none";
+
+          controls.style.display =
+            "block";
 
         }
 
-      });
+        else {
 
-    });
+          loginBox.style.display =
+            "block";
+
+          controls.style.display =
+            "none";
+
+        }
+
+      }
+    );
 
 
-  // ==========================================
-  // AUTOMATIC MODE BUTTON
-  // ==========================================
+    // ==========================================
+    // MANUAL SCREEN BUTTONS
+    // ==========================================
+    //
+    // Pressing Homepage, Slideshow, or
+    // Building Faith Together puts the kiosk
+    // into MANUAL mode.
+    // ==========================================
 
-  document
-    .getElementById("automaticButton")
-    .addEventListener("click", async () => {
+    document
+      .querySelectorAll("[data-screen]")
+      .forEach(
+        button => {
 
-      try {
+          button.addEventListener(
+            "click",
+            async () => {
 
-        await set(
-          ref(database, "kiosk/mode"),
-          "automatic"
-        );
+              const selectedScreen =
+                button.dataset.screen;
 
-        message.textContent =
-          "Automatic schedule enabled.";
 
-        setTimeout(() => {
-          message.textContent = "";
-        }, 2000);
+              try {
 
-      } catch (error) {
+                // First save the screen that
+                // should be displayed.
 
-        console.error(error);
+                await set(
+                  ref(
+                    database,
+                    "kiosk/screen"
+                  ),
+                  selectedScreen
+                );
 
-        message.textContent =
-          "Unable to enable automatic schedule.";
+
+                // Then put the kiosk into
+                // manual mode.
+
+                await set(
+                  ref(
+                    database,
+                    "kiosk/mode"
+                  ),
+                  "manual"
+                );
+
+
+                message.textContent =
+                  "Kiosk changed successfully.";
+
+
+                setTimeout(
+                  () => {
+
+                    message.textContent = "";
+
+                  },
+                  2000
+                );
+
+              }
+
+              catch (error) {
+
+                console.error(error);
+
+                message.textContent =
+                  "Unable to change kiosk.";
+
+              }
+
+            }
+          );
+
+        }
+      );
+
+
+    // ==========================================
+    // AUTOMATIC MODE BUTTON
+    // ==========================================
+    //
+    // Automatic mode tells player.html to
+    // determine the correct screen based on
+    // the San Antonio Mass schedule.
+    // ==========================================
+
+    document
+      .getElementById("automaticButton")
+      .addEventListener(
+        "click",
+        async () => {
+
+          try {
+
+            await set(
+              ref(
+                database,
+                "kiosk/mode"
+              ),
+              "automatic"
+            );
+
+
+            message.textContent =
+              "Automatic schedule enabled.";
+
+
+            setTimeout(
+              () => {
+
+                message.textContent = "";
+
+              },
+              2000
+            );
+
+          }
+
+          catch (error) {
+
+            console.error(error);
+
+            message.textContent =
+              "Unable to enable automatic schedule.";
+
+          }
+
+        }
+      );
+
+
+    // ==========================================
+    // CURRENT SCREEN DISPLAY
+    // ==========================================
+    //
+    // IMPORTANT:
+    //
+    // We read "currentScreen" here instead
+    // of "screen".
+    //
+    // kiosk/screen =
+    // requested MANUAL screen
+    //
+    // kiosk/currentScreen =
+    // screen the kiosk is ACTUALLY displaying
+    //
+    // player.html updates currentScreen.
+    // ==========================================
+
+    onValue(
+
+      ref(
+        database,
+        "kiosk/currentScreen"
+      ),
+
+      (snapshot) => {
+
+        const displayedScreen =
+          snapshot.val() ||
+          "homepage";
+
+
+        if (
+          displayedScreen ===
+          "homepage"
+        ) {
+
+          currentScreen.textContent =
+            "Homepage";
+
+        }
+
+        else if (
+          displayedScreen ===
+          "slideshow"
+        ) {
+
+          currentScreen.textContent =
+            "Slideshow";
+
+        }
+
+        else if (
+          displayedScreen ===
+          "thermometer"
+        ) {
+
+          currentScreen.textContent =
+            "Building Faith Together";
+
+        }
+
+        else {
+
+          currentScreen.textContent =
+            displayedScreen;
+
+        }
 
       }
 
-    });
+    );
 
 
-  // ==========================================
-  // CURRENT SCREEN DISPLAY
-  // ==========================================
+    // ==========================================
+    // CURRENT MODE DISPLAY
+    // ==========================================
 
-  onValue(
-    ref(database, "kiosk/screen"),
-    (snapshot) => {
+    onValue(
 
-      const screen =
-        snapshot.val() || "homepage";
+      ref(
+        database,
+        "kiosk/mode"
+      ),
 
-      if (screen === "homepage") {
+      (snapshot) => {
 
-        currentScreen.textContent =
-          "Homepage";
-
-      } else if (screen === "slideshow") {
-
-        currentScreen.textContent =
-          "Slideshow";
-
-      } else if (screen === "thermometer") {
-
-        currentScreen.textContent =
-          "Building Faith Together";
-
-      } else {
-
-        currentScreen.textContent =
-          screen;
-
-      }
-
-    }
-  );
+        const mode =
+          snapshot.val() ||
+          "automatic";
 
 
-  // ==========================================
-  // CURRENT MODE DISPLAY
-  // ==========================================
+        if (
+          mode ===
+          "manual"
+        ) {
 
-  onValue(
-    ref(database, "kiosk/mode"),
-    (snapshot) => {
+          currentMode.textContent =
+            "Manual";
 
-      const mode =
-        snapshot.val() || "automatic";
+        }
 
-      if (mode === "manual") {
+        else {
 
-        currentMode.textContent =
-          "Manual";
+          currentMode.textContent =
+            "Automatic";
 
-      } else {
-
-        currentMode.textContent =
-          "Automatic";
+        }
 
       }
 
-    }
-  );
+    );
 
-</script>
+
+  </script>
 
 </body>
 </html>
