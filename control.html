@@ -136,8 +136,6 @@
     </div>
 
 
-    <!-- LOGIN -->
-
     <div id="loginBox">
 
       <input
@@ -161,8 +159,6 @@
 
     </div>
 
-
-    <!-- CONTROLS -->
 
     <div id="controls">
 
@@ -322,7 +318,69 @@
 
 
     // ==========================================
-    // HELPER:
+    // MASS SCHEDULE
+    // ==========================================
+    //
+    // 24-HOUR TIME
+    //
+    // Weekend:
+    // 60 minutes before Mass
+    // until 30 minutes after Mass starts
+    //
+    // Daily:
+    // 30 minutes before Mass
+    // until 15 minutes after Mass starts
+    // ==========================================
+
+    const massSchedule = {
+
+      // Sunday
+      0: [
+        { time: "07:30", type: "weekend" },
+        { time: "09:30", type: "weekend" },
+        { time: "11:30", type: "weekend" },
+        { time: "13:30", type: "weekend" },
+        { time: "15:30", type: "weekend" }
+      ],
+
+      // Monday
+      1: [
+        { time: "08:30", type: "daily" }
+      ],
+
+      // Tuesday
+      2: [
+        { time: "08:30", type: "daily" },
+        { time: "18:30", type: "daily" }
+      ],
+
+      // Wednesday
+      3: [
+        { time: "08:30", type: "daily" },
+        { time: "12:10", type: "daily" }
+      ],
+
+      // Thursday
+      4: [
+        { time: "08:30", type: "daily" }
+      ],
+
+      // Friday
+      5: [
+        { time: "08:30", type: "daily" }
+      ],
+
+      // Saturday
+      6: [
+        { time: "08:30", type: "daily" },
+        { time: "16:30", type: "weekend" },
+        { time: "18:30", type: "weekend" }
+      ]
+
+    };
+
+
+    // ==========================================
     // FRIENDLY SCREEN NAME
     // ==========================================
 
@@ -341,6 +399,156 @@
       }
 
       return screen || "Homepage";
+    }
+
+
+    // ==========================================
+    // GET SAN ANTONIO TIME
+    // ==========================================
+    //
+    // America/Chicago automatically handles
+    // CST and CDT.
+    // ==========================================
+
+    function getSanAntonioTime() {
+
+      const parts =
+        new Intl.DateTimeFormat(
+          "en-US",
+          {
+            timeZone: "America/Chicago",
+            weekday: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+            hourCycle: "h23"
+          }
+        ).formatToParts(new Date());
+
+
+      const values = {};
+
+
+      for (const part of parts) {
+
+        if (part.type !== "literal") {
+          values[part.type] = part.value;
+        }
+
+      }
+
+
+      const dayNumbers = {
+        Sun: 0,
+        Mon: 1,
+        Tue: 2,
+        Wed: 3,
+        Thu: 4,
+        Fri: 5,
+        Sat: 6
+      };
+
+
+      return {
+
+        day:
+          dayNumbers[values.weekday],
+
+        hour:
+          Number(values.hour),
+
+        minute:
+          Number(values.minute)
+
+      };
+
+    }
+
+
+    // ==========================================
+    // CALCULATE AUTOMATIC SCREEN
+    // ==========================================
+
+    function getScheduledScreen() {
+
+      const sanAntonio =
+        getSanAntonioTime();
+
+
+      const day =
+        sanAntonio.day;
+
+
+      const currentMinutes =
+        sanAntonio.hour * 60 +
+        sanAntonio.minute;
+
+
+      const masses =
+        massSchedule[day] || [];
+
+
+      for (const mass of masses) {
+
+
+        const [hour, minute] =
+          mass.time
+            .split(":")
+            .map(Number);
+
+
+        const massMinutes =
+          hour * 60 +
+          minute;
+
+
+        // WEEKEND MASS
+        if (mass.type === "weekend") {
+
+          const slideshowStart =
+            massMinutes - 60;
+
+          const slideshowEnd =
+            massMinutes + 30;
+
+
+          if (
+            currentMinutes >= slideshowStart &&
+            currentMinutes < slideshowEnd
+          ) {
+
+            return "slideshow";
+
+          }
+
+        }
+
+
+        // DAILY MASS
+        if (mass.type === "daily") {
+
+          const slideshowStart =
+            massMinutes - 30;
+
+          const slideshowEnd =
+            massMinutes + 15;
+
+
+          if (
+            currentMinutes >= slideshowStart &&
+            currentMinutes < slideshowEnd
+          ) {
+
+            return "slideshow";
+
+          }
+
+        }
+
+      }
+
+
+      return "homepage";
+
     }
 
 
@@ -445,18 +653,6 @@
     // ==========================================
     // MANUAL SCREEN BUTTONS
     // ==========================================
-    //
-    // IMPORTANT:
-    //
-    // When a manual button is pressed we update:
-    //
-    // 1. kiosk/screen
-    // 2. kiosk/mode
-    // 3. kiosk/currentScreen
-    //
-    // This keeps the control panel and the
-    // physical kiosk synchronized.
-    // ==========================================
 
     document
       .querySelectorAll("[data-screen]")
@@ -477,7 +673,7 @@
 
               try {
 
-                // Save requested screen
+                // Save requested manual screen
                 await set(
                   ref(
                     database,
@@ -487,7 +683,7 @@
                 );
 
 
-                // Put kiosk into manual mode
+                // Change to manual mode
                 await set(
                   ref(
                     database,
@@ -497,8 +693,7 @@
                 );
 
 
-                // Immediately update the
-                // currently-displaying status.
+                // Update actual display status
                 await set(
                   ref(
                     database,
@@ -508,8 +703,6 @@
                 );
 
 
-                // Immediately update the text
-                // on this control page too.
                 currentScreen.textContent =
                   getScreenName(
                     selectedScreen
@@ -526,9 +719,7 @@
 
                 setTimeout(
                   () => {
-
                     message.textContent = "";
-
                   },
                   2000
                 );
@@ -552,12 +743,18 @@
 
 
     // ==========================================
-    // AUTOMATIC MODE
+    // AUTOMATIC MODE BUTTON
     // ==========================================
     //
-    // player.html will calculate the correct
-    // screen using San Antonio time and then
-    // update kiosk/currentScreen.
+    // FIX:
+    //
+    // When Automatic is pressed, calculate
+    // what SHOULD be displaying right now,
+    // immediately update currentScreen,
+    // and then enable Automatic mode.
+    //
+    // player.html will continue maintaining
+    // the schedule after this.
     // ==========================================
 
     document
@@ -572,6 +769,13 @@
 
           try {
 
+            // Calculate what should be displayed
+            // RIGHT NOW in San Antonio.
+            const automaticScreen =
+              getScheduledScreen();
+
+
+            // Change mode to automatic.
             await set(
               ref(
                 database,
@@ -579,6 +783,24 @@
               ),
               "automatic"
             );
+
+
+            // Immediately synchronize the
+            // currently displayed status.
+            await set(
+              ref(
+                database,
+                "kiosk/currentScreen"
+              ),
+              automaticScreen
+            );
+
+
+            // Update control page immediately.
+            currentScreen.textContent =
+              getScreenName(
+                automaticScreen
+              );
 
 
             currentMode.textContent =
@@ -591,9 +813,7 @@
 
             setTimeout(
               () => {
-
                 message.textContent = "";
-
               },
               2000
             );
@@ -615,10 +835,6 @@
 
     // ==========================================
     // LIVE CURRENT SCREEN
-    // ==========================================
-    //
-    // This is the ACTUAL screen being reported
-    // by player.html.
     // ==========================================
 
     onValue(
