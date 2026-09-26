@@ -51,6 +51,7 @@
     allow="autoplay; fullscreen"
   ></iframe>
 
+
   <script type="module">
 
     import { initializeApp }
@@ -123,6 +124,7 @@
       const url =
         pages[selected];
 
+      // Do not reload the same screen unnecessarily.
       if (currentScreen === selected) {
         return;
       }
@@ -144,53 +146,253 @@
     // ==========================================
     // MASS SCHEDULE
     // ==========================================
+    //
+    // IMPORTANT:
+    // Times below use a 24-hour clock.
+    //
+    // Examples:
+    // 07:30 = 7:30 AM
+    // 08:30 = 8:30 AM
+    // 12:10 = 12:10 PM
+    // 13:30 = 1:30 PM
+    // 15:30 = 3:30 PM
+    // 16:30 = 4:30 PM
+    // 18:30 = 6:30 PM
+    //
+    // "weekend":
+    // slideshow begins 60 minutes before Mass
+    // and ends 30 minutes after Mass begins.
+    //
+    // "daily":
+    // slideshow begins 30 minutes before Mass
+    // and ends 15 minutes after Mass begins.
+    // ==========================================
 
     const massSchedule = {
 
-      // Sunday
+      // ========================================
+      // SUNDAY
+      // ========================================
       0: [
-        { time: "07:30", type: "weekend" },
-        { time: "09:30", type: "weekend" },
-        { time: "11:30", type: "weekend" },
-        { time: "13:30", type: "weekend" },
-        { time: "15:30", type: "weekend" }
+
+        // 7:30 AM
+        {
+          time: "07:30",
+          type: "weekend"
+        },
+
+        // 9:30 AM
+        {
+          time: "09:30",
+          type: "weekend"
+        },
+
+        // 11:30 AM
+        {
+          time: "11:30",
+          type: "weekend"
+        },
+
+        // 1:30 PM - Spanish
+        {
+          time: "13:30",
+          type: "weekend"
+        },
+
+        // 3:30 PM
+        {
+          time: "15:30",
+          type: "weekend"
+        }
+
       ],
 
-      // Monday
+
+      // ========================================
+      // MONDAY
+      // ========================================
       1: [
-        { time: "08:30", type: "daily" }
+
+        // 8:30 AM
+        {
+          time: "08:30",
+          type: "daily"
+        }
+
       ],
 
-      // Tuesday
+
+      // ========================================
+      // TUESDAY
+      // ========================================
       2: [
-        { time: "08:30", type: "daily" },
-        { time: "18:30", type: "daily" }
+
+        // 8:30 AM - Spanish
+        {
+          time: "08:30",
+          type: "daily"
+        },
+
+        // 6:30 PM
+        {
+          time: "18:30",
+          type: "daily"
+        }
+
       ],
 
-      // Wednesday
+
+      // ========================================
+      // WEDNESDAY
+      // ========================================
       3: [
-        { time: "08:30", type: "daily" },
-        { time: "12:10", type: "daily" }
+
+        // 8:30 AM
+        {
+          time: "08:30",
+          type: "daily"
+        },
+
+        // 12:10 PM
+        {
+          time: "12:10",
+          type: "daily"
+        }
+
       ],
 
-      // Thursday
+
+      // ========================================
+      // THURSDAY
+      // ========================================
       4: [
-        { time: "08:30", type: "daily" }
+
+        // 8:30 AM
+        {
+          time: "08:30",
+          type: "daily"
+        }
+
       ],
 
-      // Friday
+
+      // ========================================
+      // FRIDAY
+      // ========================================
       5: [
-        { time: "08:30", type: "daily" }
+
+        // 8:30 AM
+        {
+          time: "08:30",
+          type: "daily"
+        }
+
       ],
 
-      // Saturday
+
+      // ========================================
+      // SATURDAY
+      // ========================================
       6: [
-        { time: "08:30", type: "daily" },
-        { time: "16:30", type: "weekend" },
-        { time: "18:30", type: "weekend" }
+
+        // 8:30 AM Daily Mass
+        {
+          time: "08:30",
+          type: "daily"
+        },
+
+        // 4:30 PM Sunday Vigil Mass
+        {
+          time: "16:30",
+          type: "weekend"
+        },
+
+        // 6:30 PM Spanish Sunday Vigil Mass
+        {
+          time: "18:30",
+          type: "weekend"
+        }
+
       ]
 
     };
+
+
+    // ==========================================
+    // GET SAN ANTONIO TIME
+    // ==========================================
+    //
+    // We DO NOT use the kiosk's local timezone
+    // for scheduling.
+    //
+    // America/Chicago is the timezone used in
+    // San Antonio, Texas.
+    //
+    // The browser automatically switches between:
+    //
+    // CST = Central Standard Time
+    // CDT = Central Daylight Time
+    //
+    // This prevents the schedule from changing
+    // if the Android device has the wrong timezone.
+    // ==========================================
+
+    function getSanAntonioTime() {
+
+      const parts =
+        new Intl.DateTimeFormat(
+          "en-US",
+          {
+            timeZone: "America/Chicago",
+            weekday: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hourCycle: "h23"
+          }
+        ).formatToParts(new Date());
+
+
+      const values = {};
+
+
+      for (const part of parts) {
+
+        if (part.type !== "literal") {
+          values[part.type] = part.value;
+        }
+
+      }
+
+
+      const dayNumbers = {
+        Sun: 0,
+        Mon: 1,
+        Tue: 2,
+        Wed: 3,
+        Thu: 4,
+        Fri: 5,
+        Sat: 6
+      };
+
+
+      return {
+
+        day:
+          dayNumbers[values.weekday],
+
+        hour:
+          Number(values.hour),
+
+        minute:
+          Number(values.minute),
+
+        second:
+          Number(values.second)
+
+      };
+
+    }
 
 
     // ==========================================
@@ -199,64 +401,111 @@
 
     function getScheduledScreen() {
 
-      const now = new Date();
+      const sanAntonio =
+        getSanAntonioTime();
+
 
       const day =
-        now.getDay();
+        sanAntonio.day;
+
 
       const currentMinutes =
-        now.getHours() * 60 +
-        now.getMinutes();
+        sanAntonio.hour * 60 +
+        sanAntonio.minute;
+
 
       const masses =
         massSchedule[day] || [];
 
 
+      // Check every Mass scheduled today.
       for (const mass of masses) {
 
+
         const [hour, minute] =
-          mass.time.split(":").map(Number);
+          mass.time
+            .split(":")
+            .map(Number);
+
 
         const massMinutes =
-          hour * 60 + minute;
+          hour * 60 +
+          minute;
 
+
+        // ======================================
+        // WEEKEND MASS
+        // ======================================
+        //
+        // Slideshow:
+        // 60 minutes BEFORE Mass
+        // through
+        // 30 minutes AFTER Mass begins.
+        // ======================================
 
         if (mass.type === "weekend") {
+
 
           const slideshowStart =
             massMinutes - 60;
 
+
           const slideshowEnd =
             massMinutes + 30;
+
 
           if (
             currentMinutes >= slideshowStart &&
             currentMinutes < slideshowEnd
           ) {
+
             return "slideshow";
+
           }
+
         }
 
 
+        // ======================================
+        // DAILY MASS
+        // ======================================
+        //
+        // Slideshow:
+        // 30 minutes BEFORE Mass
+        // through
+        // 15 minutes AFTER Mass begins.
+        // ======================================
+
         if (mass.type === "daily") {
+
 
           const slideshowStart =
             massMinutes - 30;
 
+
           const slideshowEnd =
             massMinutes + 15;
+
 
           if (
             currentMinutes >= slideshowStart &&
             currentMinutes < slideshowEnd
           ) {
+
             return "slideshow";
+
           }
+
         }
+
       }
 
 
+      // If there is no Mass window active,
+      // display the interactive homepage.
+
       return "homepage";
+
     }
 
 
@@ -268,38 +517,70 @@
 
       try {
 
+
+        // First check whether the kiosk is
+        // currently in automatic or manual mode.
+
         const modeSnapshot =
           await get(
-            ref(database, "kiosk/mode")
+            ref(
+              database,
+              "kiosk/mode"
+            )
           );
 
-        const mode =
-          modeSnapshot.val() || "automatic";
 
+        const mode =
+          modeSnapshot.val() ||
+          "automatic";
+
+
+        // ======================================
+        // MANUAL MODE
+        // ======================================
 
         if (mode === "manual") {
 
+
           const screenSnapshot =
             await get(
-              ref(database, "kiosk/screen")
+              ref(
+                database,
+                "kiosk/screen"
+              )
             );
 
-          const manualScreen =
-            screenSnapshot.val() || "homepage";
 
-          showScreen(manualScreen);
+          const manualScreen =
+            screenSnapshot.val() ||
+            "homepage";
+
+
+          showScreen(
+            manualScreen
+          );
+
 
           return;
+
         }
 
+
+        // ======================================
+        // AUTOMATIC MODE
+        // ======================================
 
         const scheduledScreen =
           getScheduledScreen();
 
-        showScreen(scheduledScreen);
+
+        showScreen(
+          scheduledScreen
+        );
 
 
       } catch (error) {
+
 
         console.error(
           "Kiosk schedule error:",
@@ -307,8 +588,16 @@
         );
 
 
+        // If Firebase cannot be reached when
+        // the kiosk first loads, safely show
+        // the homepage instead of a blank screen.
+
         if (!currentScreen) {
-          showScreen("homepage");
+
+          showScreen(
+            "homepage"
+          );
+
         }
 
       }
@@ -317,51 +606,97 @@
 
 
     // ==========================================
-    // LIVE FIREBASE LISTENERS
+    // LIVE FIREBASE LISTENER:
+    // MODE
+    // ==========================================
+    //
+    // This allows the controller to immediately
+    // switch between:
+    //
+    // AUTOMATIC
+    // MANUAL
     // ==========================================
 
     onValue(
-      ref(database, "kiosk/mode"),
+
+      ref(
+        database,
+        "kiosk/mode"
+      ),
+
       () => {
+
         applyAutomaticSchedule();
+
       }
+
     );
 
 
+    // ==========================================
+    // LIVE FIREBASE LISTENER:
+    // MANUAL SCREEN
+    // ==========================================
+    //
+    // If manual mode is active, changes from
+    // control.html immediately change the kiosk.
+    // ==========================================
+
     onValue(
-      ref(database, "kiosk/screen"),
+
+      ref(
+        database,
+        "kiosk/screen"
+      ),
+
       async (snapshot) => {
+
 
         try {
 
+
           const modeSnapshot =
             await get(
-              ref(database, "kiosk/mode")
+              ref(
+                database,
+                "kiosk/mode"
+              )
             );
 
+
           const mode =
-            modeSnapshot.val() || "automatic";
+            modeSnapshot.val() ||
+            "automatic";
 
 
           if (mode === "manual") {
 
-            const selectedScreen =
-              snapshot.val() || "homepage";
 
-            showScreen(selectedScreen);
+            const selectedScreen =
+              snapshot.val() ||
+              "homepage";
+
+
+            showScreen(
+              selectedScreen
+            );
 
           }
 
+
         } catch (error) {
+
 
           console.error(
             "Manual screen error:",
             error
           );
 
+
         }
 
       }
+
     );
 
 
@@ -371,6 +706,15 @@
 
     applyAutomaticSchedule();
 
+
+    // ==========================================
+    // CHECK SCHEDULE EVERY 30 SECONDS
+    // ==========================================
+    //
+    // This means the kiosk will automatically
+    // change screens within approximately
+    // 30 seconds of a scheduled transition.
+    // ==========================================
 
     setInterval(
       applyAutomaticSchedule,
