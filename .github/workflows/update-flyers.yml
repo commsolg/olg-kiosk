@@ -1,0 +1,64 @@
+name: Update Kiosk Flyers
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "flyers/**"
+
+permissions:
+  contents: write
+
+jobs:
+  update-flyer-list:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get repository
+        uses: actions/checkout@v4
+
+      - name: Generate flyer list
+        run: |
+          python3 <<'PY'
+          import json
+          from pathlib import Path
+
+          folder = Path("flyers")
+
+          allowed = {
+              ".png",
+              ".jpg",
+              ".jpeg",
+              ".webp"
+          }
+
+          flyers = sorted(
+              [
+                  str(file.as_posix())
+                  for file in folder.iterdir()
+                  if file.is_file()
+                  and file.suffix.lower() in allowed
+              ]
+          )
+
+          with open("flyers.json", "w") as f:
+              json.dump(flyers, f, indent=2)
+
+          print("Flyers:")
+          print(json.dumps(flyers, indent=2))
+          PY
+
+      - name: Save updated flyer list
+        run: |
+          git config user.name "OLG Kiosk Bot"
+          git config user.email "actions@github.com"
+
+          git add flyers.json
+
+          if git diff --cached --quiet; then
+            echo "Flyer list is already up to date."
+          else
+            git commit -m "Automatically update kiosk flyer list"
+            git push
+          fi
