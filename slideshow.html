@@ -24,32 +24,21 @@
       height: 100%;
       overflow: hidden;
       background: #000;
-
       user-select: none;
       -webkit-user-select: none;
-
       touch-action: none;
     }
-
-    /* ==========================================
-       SLIDESHOW
-       ========================================== */
 
     #slideshow {
       position: fixed;
       inset: 0;
-
       width: 100%;
       height: 100%;
-
       overflow: hidden;
-
       background: #000;
     }
 
-    /* ==========================================
-       FLYER
-       ========================================== */
+    /* FLYER */
 
     #flyer {
       position: absolute;
@@ -62,11 +51,9 @@
       object-position: center;
 
       display: block;
-
       background: #000;
 
       opacity: 1;
-
       transition: opacity 0.3s ease;
 
       pointer-events: none;
@@ -76,20 +63,12 @@
       opacity: 0;
     }
 
-    /* ==========================================
-       INVISIBLE TOUCH AREAS
-
-       Left = Previous
-       Middle = Home
-       Right = Next
-       ========================================== */
+    /* INVISIBLE TOUCH AREAS */
 
     .touch-zone {
       position: absolute;
-
       top: 0;
       bottom: 0;
-
       z-index: 10;
     }
 
@@ -108,11 +87,7 @@
       width: 35%;
     }
 
-    /* ==========================================
-       HOME BUTTON
-
-       Hidden unless center of screen is tapped.
-       ========================================== */
+    /* HOME BUTTON */
 
     #homeButton {
       position: fixed;
@@ -124,22 +99,15 @@
         translateX(-50%)
         translateY(20px);
 
-      padding:
-        20px 34px;
+      padding: 20px 34px;
 
       border: none;
-
       border-radius: 50px;
 
-      background:
-        rgba(0, 0, 0, 0.72);
-
+      background: rgba(0, 0, 0, 0.72);
       color: white;
 
-      font-family:
-        Arial,
-        sans-serif;
-
+      font-family: Arial, sans-serif;
       font-size: 26px;
       font-weight: bold;
 
@@ -148,7 +116,6 @@
       z-index: 100;
 
       opacity: 0;
-
       pointer-events: none;
 
       transition:
@@ -158,7 +125,6 @@
 
     #homeButton.visible {
       opacity: 1;
-
       pointer-events: auto;
 
       transform:
@@ -166,40 +132,29 @@
         translateY(0);
     }
 
-    /* ==========================================
-       ERROR MESSAGE
-       ========================================== */
+    /* LOADING / ERROR */
 
-    #error {
+    #message {
       position: fixed;
-
       inset: 0;
 
-      display: none;
-
+      display: flex;
       align-items: center;
       justify-content: center;
 
       padding: 50px;
 
       background: #3a3e42;
-
       color: white;
 
-      font-family:
-        Arial,
-        sans-serif;
-
+      font-family: Arial, sans-serif;
       font-size: 30px;
-
       text-align: center;
 
       z-index: 200;
     }
-
   </style>
 </head>
-
 
 <body>
 
@@ -210,8 +165,7 @@
       alt="OLG Event Flyer"
     >
 
-
-    <!-- Invisible navigation -->
+    <!-- Invisible navigation areas -->
 
     <div
       id="leftZone"
@@ -219,20 +173,17 @@
       aria-label="Previous flyer"
     ></div>
 
-
     <div
       id="centerZone"
       class="touch-zone"
       aria-label="Show home button"
     ></div>
 
-
     <div
       id="rightZone"
       class="touch-zone"
       aria-label="Next flyer"
     ></div>
-
 
     <!-- Home button -->
 
@@ -245,49 +196,24 @@
 
   </div>
 
-
-  <div id="error">
-    Unable to load flyer.
+  <div id="message">
+    Loading OLG Flyers...
   </div>
 
 
   <script>
 
     // ==========================================
-    // OLG FLYERS
-    // ==========================================
-    //
-    // Add future flyers here.
-    //
-    // Example:
-    //
-    // "flyers/another-flyer.png",
-    //
-    // ==========================================
-
-    const flyers = [
-
-      "flyers/ChatGPT Image Sep 29, 2026, 09_41_09 AM.png"
-
-    ];
-
-
-    // ==========================================
     // SETTINGS
     // ==========================================
 
-    // Automatically change flyer every 15 seconds.
-
+    // Automatically change every 15 seconds
     const AUTO_ADVANCE_TIME = 15000;
 
-
-    // Home button disappears after 4 seconds.
-
+    // Hide Home button after 4 seconds
     const HOME_HIDE_TIME = 4000;
 
-
-    // Minimum swipe distance.
-
+    // Minimum distance required for a swipe
     const SWIPE_THRESHOLD = 70;
 
 
@@ -298,30 +224,27 @@
     const flyer =
       document.getElementById("flyer");
 
-
     const leftZone =
       document.getElementById("leftZone");
-
 
     const centerZone =
       document.getElementById("centerZone");
 
-
     const rightZone =
       document.getElementById("rightZone");
-
 
     const homeButton =
       document.getElementById("homeButton");
 
-
-    const error =
-      document.getElementById("error");
+    const message =
+      document.getElementById("message");
 
 
     // ==========================================
     // STATE
     // ==========================================
+
+    let flyers = [];
 
     let currentIndex = 0;
 
@@ -339,6 +262,102 @@
 
 
     // ==========================================
+    // LOAD FLYERS.JSON
+    // ==========================================
+
+    async function loadFlyers() {
+
+      try {
+
+        /*
+          The timestamp prevents the kiosk browser
+          from using an old cached copy of flyers.json.
+        */
+
+        const response = await fetch(
+          "flyers.json?t=" + Date.now(),
+          {
+            cache: "no-store"
+          }
+        );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Unable to load flyers.json"
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        if (!Array.isArray(data)) {
+
+          throw new Error(
+            "Invalid flyer list"
+          );
+
+        }
+
+
+        flyers = data.filter(
+          item =>
+            typeof item === "string" &&
+            item.trim() !== ""
+        );
+
+
+        if (flyers.length === 0) {
+
+          message.style.display =
+            "flex";
+
+          message.textContent =
+            "No flyers are currently available.";
+
+          return;
+
+        }
+
+
+        preloadFlyers();
+
+
+        showFlyer(
+          0,
+          false
+        );
+
+
+        startAutoAdvance();
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Flyer list error:",
+          error
+        );
+
+
+        message.style.display =
+          "flex";
+
+
+        message.textContent =
+          "Unable to load OLG flyers.";
+
+      }
+
+    }
+
+
+    // ==========================================
     // SHOW FLYER
     // ==========================================
 
@@ -348,12 +367,6 @@
     ) {
 
       if (flyers.length === 0) {
-
-        error.style.display =
-          "flex";
-
-        error.textContent =
-          "No flyers are currently available.";
 
         return;
 
@@ -396,7 +409,7 @@
       nextImage.onload =
         () => {
 
-          error.style.display =
+          message.style.display =
             "none";
 
 
@@ -449,7 +462,7 @@
         () => {
 
           console.error(
-            "Unable to load:",
+            "Unable to load flyer:",
             flyers[index]
           );
 
@@ -458,12 +471,36 @@
             false;
 
 
-          error.style.display =
-            "flex";
+          /*
+            If one flyer is broken, skip it
+            instead of freezing the kiosk.
+          */
+
+          if (flyers.length > 1) {
+
+            currentIndex =
+              index;
 
 
-          error.textContent =
-            "Unable to load flyer.";
+            setTimeout(
+              () => {
+                nextFlyer(false);
+              },
+              500
+            );
+
+          }
+
+          else {
+
+            message.style.display =
+              "flex";
+
+
+            message.textContent =
+              "Unable to load flyer.";
+
+          }
 
         };
 
@@ -475,23 +512,29 @@
 
 
     // ==========================================
-    // NEXT FLYER
+    // NEXT
     // ==========================================
 
-    function nextFlyer() {
+    function nextFlyer(
+      restart = true
+    ) {
 
       showFlyer(
         currentIndex + 1
       );
 
 
-      restartAutoAdvance();
+      if (restart) {
+
+        restartAutoAdvance();
+
+      }
 
     }
 
 
     // ==========================================
-    // PREVIOUS FLYER
+    // PREVIOUS
     // ==========================================
 
     function previousFlyer() {
@@ -631,7 +674,7 @@
 
 
     // ==========================================
-    // SWIPE START
+    // TOUCH / SWIPE
     // ==========================================
 
     document.addEventListener(
@@ -664,10 +707,6 @@
       }
     );
 
-
-    // ==========================================
-    // SWIPE MOVE
-    // ==========================================
 
     document.addEventListener(
       "touchmove",
@@ -715,10 +754,6 @@
     );
 
 
-    // ==========================================
-    // SWIPE END
-    // ==========================================
-
     document.addEventListener(
       "touchend",
 
@@ -752,13 +787,11 @@
 
 
         if (
-
           Math.abs(deltaX) >
             Math.abs(deltaY) &&
 
           Math.abs(deltaX) >=
             SWIPE_THRESHOLD
-
         ) {
 
 
@@ -790,9 +823,6 @@
           null;
 
 
-        // Reset after browser finishes
-        // processing the touch/click.
-
         setTimeout(
           () => {
 
@@ -815,9 +845,6 @@
     // ==========================================
     // KEYBOARD SUPPORT
     // ==========================================
-    //
-    // Useful when testing on your computer.
-    // ==========================================
 
     document.addEventListener(
       "keydown",
@@ -825,8 +852,7 @@
       event => {
 
         if (
-          event.key ===
-          "ArrowRight"
+          event.key === "ArrowRight"
         ) {
 
           nextFlyer();
@@ -835,8 +861,7 @@
 
 
         if (
-          event.key ===
-          "ArrowLeft"
+          event.key === "ArrowLeft"
         ) {
 
           previousFlyer();
@@ -845,8 +870,7 @@
 
 
         if (
-          event.key ===
-          "Enter"
+          event.key === "Enter"
         ) {
 
           showHomeButton();
@@ -858,7 +882,7 @@
 
 
     // ==========================================
-    // PRELOAD FLYERS
+    // PRELOAD IMAGES
     // ==========================================
 
     function preloadFlyers() {
@@ -883,23 +907,7 @@
     // START
     // ==========================================
 
-    function startSlideshow() {
-
-      preloadFlyers();
-
-
-      showFlyer(
-        0,
-        false
-      );
-
-
-      startAutoAdvance();
-
-    }
-
-
-    startSlideshow();
+    loadFlyers();
 
   </script>
 
