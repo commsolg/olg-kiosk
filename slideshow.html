@@ -1,1 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
 
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <title>OLG Kiosk Slideshow</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      font-family: Arial, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    #slideshow {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+
+    /* ==========================================
+       FLYER
+       ========================================== */
+
+    #flyer {
+      position: absolute;
+      inset: 0;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: contain;
+      object-position: center;
+
+      display: block;
+      background: #000;
+    }
+
+    /* ==========================================
+       PREVIOUS / NEXT BUTTONS
+       ========================================== */
+
+    .nav {
+      position: fixed;
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      width: 90px;
+      height: 150px;
+
+      border: none;
+      border-radius: 18px;
+
+      background: rgba(0, 0, 0, 0.55);
+      color: white;
+
+      font-size: 65px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      cursor: pointer;
+
+      z-index: 10;
+    }
+
+    #previous {
+      left: 20px;
+    }
+
+    #next {
+      right: 20px;
+    }
+
+    /* ==========================================
+       COUNTER
+       ========================================== */
+
+    #counter {
+      position: fixed;
+
+      bottom: 24px;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      padding: 12px 22px;
+
+      border-radius: 30px;
+
+      background: rgba(0, 0, 0, 0.60);
+      color: white;
+
+      font-size: 22px;
+
+      z-index: 10;
+    }
+
+    /* ==========================================
+       ERROR MESSAGE
+       ========================================== */
+
+    #error {
+      position: fixed;
+      inset: 0;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 40px;
+
+      background: #3a3e42;
+      color: white;
+
+      text-align: center;
+      font-size: 28px;
+
+      z-index: 20;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="slideshow">
+
+    <img
+      id="flyer"
+      alt="OLG Event Flyer"
+    >
+
+    <button
+      id="previous"
+      class="nav"
+      aria-label="Previous flyer"
+    >
+      ‹
+    </button>
+
+    <button
+      id="next"
+      class="nav"
+      aria-label="Next flyer"
+    >
+      ›
+    </button>
+
+    <div id="counter">
+      1 / 1
+    </div>
+
+  </div>
+
+  <div id="error">
+    Unable to load flyer.
+  </div>
+
+
+  <script>
+
+    // ==========================================
+    // OLG FLYERS
+    // ==========================================
+
+    const flyers = [
+      "flyers/ChatGPT Image Sep 29, 2026, 09_41_09 AM.png"
+    ];
+
+
+    // ==========================================
+    // SETTINGS
+    // ==========================================
+
+    // 15 seconds per flyer
+
+    const AUTO_ADVANCE_SECONDS = 15;
+
+
+    // ==========================================
+    // ELEMENTS
+    // ==========================================
+
+    const flyer =
+      document.getElementById("flyer");
+
+    const counter =
+      document.getElementById("counter");
+
+    const error =
+      document.getElementById("error");
+
+    const previousButton =
+      document.getElementById("previous");
+
+    const nextButton =
+      document.getElementById("next");
+
+
+    // ==========================================
+    // STATE
+    // ==========================================
+
+    let currentIndex = 0;
+
+    let autoTimer = null;
+
+    let touchStartX = 0;
+
+
+    // ==========================================
+    // SHOW FLYER
+    // ==========================================
+
+    function showFlyer(index) {
+
+      if (flyers.length === 0) {
+
+        error.style.display = "flex";
+
+        error.textContent =
+          "No flyers are currently available.";
+
+        return;
+      }
+
+
+      // Loop backward
+
+      if (index < 0) {
+
+        index = flyers.length - 1;
+
+      }
+
+
+      // Loop forward
+
+      if (index >= flyers.length) {
+
+        index = 0;
+
+      }
+
+
+      currentIndex = index;
+
+
+      error.style.display = "none";
+
+
+      flyer.onload = () => {
+
+        error.style.display = "none";
+
+      };
+
+
+      flyer.onerror = () => {
+
+        error.style.display = "flex";
+
+        error.textContent =
+          "Unable to load flyer.";
+
+      };
+
+
+      flyer.src =
+        flyers[currentIndex];
+
+
+      counter.textContent =
+        `${currentIndex + 1} / ${flyers.length}`;
+
+    }
+
+
+    // ==========================================
+    // NEXT
+    // ==========================================
+
+    function nextFlyer() {
+
+      showFlyer(
+        currentIndex + 1
+      );
+
+      restartTimer();
+
+    }
+
+
+    // ==========================================
+    // PREVIOUS
+    // ==========================================
+
+    function previousFlyer() {
+
+      showFlyer(
+        currentIndex - 1
+      );
+
+      restartTimer();
+
+    }
+
+
+    // ==========================================
+    // AUTOMATIC ROTATION
+    // ==========================================
+
+    function restartTimer() {
+
+      clearInterval(
+        autoTimer
+      );
+
+
+      if (flyers.length > 1) {
+
+        autoTimer =
+          setInterval(
+            () => {
+
+              showFlyer(
+                currentIndex + 1
+              );
+
+            },
+
+            AUTO_ADVANCE_SECONDS * 1000
+          );
+
+      }
+
+    }
+
+
+    // ==========================================
+    // BUTTONS
+    // ==========================================
+
+    nextButton.addEventListener(
+      "click",
+      nextFlyer
+    );
+
+
+    previousButton.addEventListener(
+      "click",
+      previousFlyer
+    );
+
+
+    // ==========================================
+    // TOUCHSCREEN SWIPE
+    // ==========================================
+
+    document.addEventListener(
+      "touchstart",
+
+      event => {
+
+        touchStartX =
+          event.changedTouches[0].screenX;
+
+      },
+
+      {
+        passive: true
+      }
+    );
+
+
+    document.addEventListener(
+      "touchend",
+
+      event => {
+
+        const touchEndX =
+          event.changedTouches[0].screenX;
+
+
+        const difference =
+          touchEndX - touchStartX;
+
+
+        // Swipe right
+
+        if (difference > 80) {
+
+          previousFlyer();
+
+        }
+
+
+        // Swipe left
+
+        else if (difference < -80) {
+
+          nextFlyer();
+
+        }
+
+      },
+
+      {
+        passive: true
+      }
+    );
+
+
+    // ==========================================
+    // KEYBOARD ARROWS
+    // ==========================================
+    //
+    // Useful for testing on computer.
+    // ==========================================
+
+    document.addEventListener(
+      "keydown",
+
+      event => {
+
+        if (
+          event.key === "ArrowRight"
+        ) {
+
+          nextFlyer();
+
+        }
+
+
+        if (
+          event.key === "ArrowLeft"
+        ) {
+
+          previousFlyer();
+
+        }
+
+      }
+    );
+
+
+    // ==========================================
+    // START
+    // ==========================================
+
+    showFlyer(0);
+
+    restartTimer();
+
+  </script>
+
+</body>
+</html>
