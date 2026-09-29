@@ -24,17 +24,26 @@
       height: 100%;
       overflow: hidden;
       background: #000;
-      font-family: Arial, sans-serif;
+
       user-select: none;
       -webkit-user-select: none;
+
+      touch-action: none;
     }
+
+    /* ==========================================
+       SLIDESHOW
+       ========================================== */
 
     #slideshow {
       position: fixed;
       inset: 0;
+
       width: 100%;
       height: 100%;
+
       overflow: hidden;
+
       background: #000;
     }
 
@@ -53,69 +62,108 @@
       object-position: center;
 
       display: block;
+
       background: #000;
+
+      opacity: 1;
+
+      transition: opacity 0.3s ease;
+
+      pointer-events: none;
+    }
+
+    #flyer.fade {
+      opacity: 0;
     }
 
     /* ==========================================
-       PREVIOUS / NEXT BUTTONS
+       INVISIBLE TOUCH AREAS
+
+       Left = Previous
+       Middle = Home
+       Right = Next
        ========================================== */
 
-    .nav {
-      position: fixed;
-      top: 50%;
+    .touch-zone {
+      position: absolute;
 
-      transform: translateY(-50%);
-
-      width: 90px;
-      height: 150px;
-
-      border: none;
-      border-radius: 18px;
-
-      background: rgba(0, 0, 0, 0.55);
-      color: white;
-
-      font-size: 65px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      cursor: pointer;
+      top: 0;
+      bottom: 0;
 
       z-index: 10;
     }
 
-    #previous {
-      left: 20px;
+    #leftZone {
+      left: 0;
+      width: 35%;
     }
 
-    #next {
-      right: 20px;
+    #centerZone {
+      left: 35%;
+      width: 30%;
+    }
+
+    #rightZone {
+      right: 0;
+      width: 35%;
     }
 
     /* ==========================================
-       COUNTER
+       HOME BUTTON
+
+       Hidden unless center of screen is tapped.
        ========================================== */
 
-    #counter {
+    #homeButton {
       position: fixed;
 
-      bottom: 24px;
+      bottom: 60px;
       left: 50%;
 
-      transform: translateX(-50%);
+      transform:
+        translateX(-50%)
+        translateY(20px);
 
-      padding: 12px 22px;
+      padding:
+        20px 34px;
 
-      border-radius: 30px;
+      border: none;
 
-      background: rgba(0, 0, 0, 0.60);
+      border-radius: 50px;
+
+      background:
+        rgba(0, 0, 0, 0.72);
+
       color: white;
 
-      font-size: 22px;
+      font-family:
+        Arial,
+        sans-serif;
 
-      z-index: 10;
+      font-size: 26px;
+      font-weight: bold;
+
+      text-decoration: none;
+
+      z-index: 100;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    #homeButton.visible {
+      opacity: 1;
+
+      pointer-events: auto;
+
+      transform:
+        translateX(-50%)
+        translateY(0);
     }
 
     /* ==========================================
@@ -124,6 +172,7 @@
 
     #error {
       position: fixed;
+
       inset: 0;
 
       display: none;
@@ -131,18 +180,26 @@
       align-items: center;
       justify-content: center;
 
-      padding: 40px;
+      padding: 50px;
 
       background: #3a3e42;
+
       color: white;
 
-      text-align: center;
-      font-size: 28px;
+      font-family:
+        Arial,
+        sans-serif;
 
-      z-index: 20;
+      font-size: 30px;
+
+      text-align: center;
+
+      z-index: 200;
     }
+
   </style>
 </head>
+
 
 <body>
 
@@ -153,27 +210,41 @@
       alt="OLG Event Flyer"
     >
 
-    <button
-      id="previous"
-      class="nav"
+
+    <!-- Invisible navigation -->
+
+    <div
+      id="leftZone"
+      class="touch-zone"
       aria-label="Previous flyer"
-    >
-      ‹
-    </button>
+    ></div>
 
-    <button
-      id="next"
-      class="nav"
+
+    <div
+      id="centerZone"
+      class="touch-zone"
+      aria-label="Show home button"
+    ></div>
+
+
+    <div
+      id="rightZone"
+      class="touch-zone"
       aria-label="Next flyer"
-    >
-      ›
-    </button>
+    ></div>
 
-    <div id="counter">
-      1 / 1
-    </div>
+
+    <!-- Home button -->
+
+    <a
+      id="homeButton"
+      href="index.html"
+    >
+      ⌂ Home
+    </a>
 
   </div>
+
 
   <div id="error">
     Unable to load flyer.
@@ -185,9 +256,19 @@
     // ==========================================
     // OLG FLYERS
     // ==========================================
+    //
+    // Add future flyers here.
+    //
+    // Example:
+    //
+    // "flyers/another-flyer.png",
+    //
+    // ==========================================
 
     const flyers = [
+
       "flyers/ChatGPT Image Sep 29, 2026, 09_41_09 AM.png"
+
     ];
 
 
@@ -195,9 +276,19 @@
     // SETTINGS
     // ==========================================
 
-    // 15 seconds per flyer
+    // Automatically change flyer every 15 seconds.
 
-    const AUTO_ADVANCE_SECONDS = 15;
+    const AUTO_ADVANCE_TIME = 15000;
+
+
+    // Home button disappears after 4 seconds.
+
+    const HOME_HIDE_TIME = 4000;
+
+
+    // Minimum swipe distance.
+
+    const SWIPE_THRESHOLD = 70;
 
 
     // ==========================================
@@ -207,17 +298,25 @@
     const flyer =
       document.getElementById("flyer");
 
-    const counter =
-      document.getElementById("counter");
+
+    const leftZone =
+      document.getElementById("leftZone");
+
+
+    const centerZone =
+      document.getElementById("centerZone");
+
+
+    const rightZone =
+      document.getElementById("rightZone");
+
+
+    const homeButton =
+      document.getElementById("homeButton");
+
 
     const error =
       document.getElementById("error");
-
-    const previousButton =
-      document.getElementById("previous");
-
-    const nextButton =
-      document.getElementById("next");
 
 
     // ==========================================
@@ -228,23 +327,36 @@
 
     let autoTimer = null;
 
-    let touchStartX = 0;
+    let homeTimer = null;
+
+    let touchStartX = null;
+
+    let touchStartY = null;
+
+    let touchMoved = false;
+
+    let changingSlide = false;
 
 
     // ==========================================
     // SHOW FLYER
     // ==========================================
 
-    function showFlyer(index) {
+    function showFlyer(
+      index,
+      animate = true
+    ) {
 
       if (flyers.length === 0) {
 
-        error.style.display = "flex";
+        error.style.display =
+          "flex";
 
         error.textContent =
           "No flyers are currently available.";
 
         return;
+
       }
 
 
@@ -252,7 +364,8 @@
 
       if (index < 0) {
 
-        index = flyers.length - 1;
+        index =
+          flyers.length - 1;
 
       }
 
@@ -266,41 +379,103 @@
       }
 
 
-      currentIndex = index;
+      if (changingSlide) {
+
+        return;
+
+      }
 
 
-      error.style.display = "none";
+      changingSlide = true;
 
 
-      flyer.onload = () => {
-
-        error.style.display = "none";
-
-      };
+      const nextImage =
+        new Image();
 
 
-      flyer.onerror = () => {
+      nextImage.onload =
+        () => {
 
-        error.style.display = "flex";
-
-        error.textContent =
-          "Unable to load flyer.";
-
-      };
+          error.style.display =
+            "none";
 
 
-      flyer.src =
-        flyers[currentIndex];
+          const finishChange =
+            () => {
+
+              currentIndex =
+                index;
 
 
-      counter.textContent =
-        `${currentIndex + 1} / ${flyers.length}`;
+              flyer.src =
+                flyers[currentIndex];
+
+
+              flyer.classList.remove(
+                "fade"
+              );
+
+
+              changingSlide =
+                false;
+
+            };
+
+
+          if (animate) {
+
+            flyer.classList.add(
+              "fade"
+            );
+
+
+            setTimeout(
+              finishChange,
+              250
+            );
+
+          }
+
+          else {
+
+            finishChange();
+
+          }
+
+        };
+
+
+      nextImage.onerror =
+        () => {
+
+          console.error(
+            "Unable to load:",
+            flyers[index]
+          );
+
+
+          changingSlide =
+            false;
+
+
+          error.style.display =
+            "flex";
+
+
+          error.textContent =
+            "Unable to load flyer.";
+
+        };
+
+
+      nextImage.src =
+        flyers[index];
 
     }
 
 
     // ==========================================
-    // NEXT
+    // NEXT FLYER
     // ==========================================
 
     function nextFlyer() {
@@ -309,13 +484,14 @@
         currentIndex + 1
       );
 
-      restartTimer();
+
+      restartAutoAdvance();
 
     }
 
 
     // ==========================================
-    // PREVIOUS
+    // PREVIOUS FLYER
     // ==========================================
 
     function previousFlyer() {
@@ -324,7 +500,8 @@
         currentIndex - 1
       );
 
-      restartTimer();
+
+      restartAutoAdvance();
 
     }
 
@@ -333,51 +510,128 @@
     // AUTOMATIC ROTATION
     // ==========================================
 
-    function restartTimer() {
+    function startAutoAdvance() {
 
       clearInterval(
         autoTimer
       );
 
 
-      if (flyers.length > 1) {
+      if (flyers.length <= 1) {
 
-        autoTimer =
-          setInterval(
-            () => {
-
-              showFlyer(
-                currentIndex + 1
-              );
-
-            },
-
-            AUTO_ADVANCE_SECONDS * 1000
-          );
+        return;
 
       }
+
+
+      autoTimer =
+        setInterval(
+          () => {
+
+            showFlyer(
+              currentIndex + 1
+            );
+
+          },
+
+          AUTO_ADVANCE_TIME
+        );
+
+    }
+
+
+    function restartAutoAdvance() {
+
+      clearInterval(
+        autoTimer
+      );
+
+
+      startAutoAdvance();
 
     }
 
 
     // ==========================================
-    // BUTTONS
+    // HOME BUTTON
     // ==========================================
 
-    nextButton.addEventListener(
+    function showHomeButton() {
+
+      homeButton.classList.add(
+        "visible"
+      );
+
+
+      clearTimeout(
+        homeTimer
+      );
+
+
+      homeTimer =
+        setTimeout(
+          () => {
+
+            homeButton.classList.remove(
+              "visible"
+            );
+
+          },
+
+          HOME_HIDE_TIME
+        );
+
+    }
+
+
+    // ==========================================
+    // TAP NAVIGATION
+    // ==========================================
+
+    leftZone.addEventListener(
       "click",
-      nextFlyer
+      () => {
+
+        if (!touchMoved) {
+
+          previousFlyer();
+
+        }
+
+      }
     );
 
 
-    previousButton.addEventListener(
+    rightZone.addEventListener(
       "click",
-      previousFlyer
+      () => {
+
+        if (!touchMoved) {
+
+          nextFlyer();
+
+        }
+
+      }
+    );
+
+
+    centerZone.addEventListener(
+      "click",
+      () => {
+
+        if (!touchMoved) {
+
+          showHomeButton();
+
+        }
+
+      }
     );
 
 
     // ==========================================
-    // TOUCHSCREEN SWIPE
+    // SWIPE START
     // ==========================================
 
     document.addEventListener(
@@ -385,8 +639,23 @@
 
       event => {
 
+        if (!event.touches.length) {
+
+          return;
+
+        }
+
+
         touchStartX =
-          event.changedTouches[0].screenX;
+          event.touches[0].clientX;
+
+
+        touchStartY =
+          event.touches[0].clientY;
+
+
+        touchMoved =
+          false;
 
       },
 
@@ -395,36 +664,145 @@
       }
     );
 
+
+    // ==========================================
+    // SWIPE MOVE
+    // ==========================================
+
+    document.addEventListener(
+      "touchmove",
+
+      event => {
+
+        if (touchStartX === null) {
+
+          return;
+
+        }
+
+
+        const currentX =
+          event.touches[0].clientX;
+
+
+        const currentY =
+          event.touches[0].clientY;
+
+
+        const deltaX =
+          currentX - touchStartX;
+
+
+        const deltaY =
+          currentY - touchStartY;
+
+
+        if (
+          Math.abs(deltaX) > 15 ||
+          Math.abs(deltaY) > 15
+        ) {
+
+          touchMoved =
+            true;
+
+        }
+
+      },
+
+      {
+        passive: true
+      }
+    );
+
+
+    // ==========================================
+    // SWIPE END
+    // ==========================================
 
     document.addEventListener(
       "touchend",
 
       event => {
 
-        const touchEndX =
-          event.changedTouches[0].screenX;
+        if (touchStartX === null) {
 
-
-        const difference =
-          touchEndX - touchStartX;
-
-
-        // Swipe right
-
-        if (difference > 80) {
-
-          previousFlyer();
+          return;
 
         }
 
 
-        // Swipe left
+        const touch =
+          event.changedTouches[0];
 
-        else if (difference < -80) {
 
-          nextFlyer();
+        const endX =
+          touch.clientX;
+
+
+        const endY =
+          touch.clientY;
+
+
+        const deltaX =
+          endX - touchStartX;
+
+
+        const deltaY =
+          endY - touchStartY;
+
+
+        if (
+
+          Math.abs(deltaX) >
+            Math.abs(deltaY) &&
+
+          Math.abs(deltaX) >=
+            SWIPE_THRESHOLD
+
+        ) {
+
+
+          // Swipe LEFT = next
+
+          if (deltaX < 0) {
+
+            nextFlyer();
+
+          }
+
+
+          // Swipe RIGHT = previous
+
+          else {
+
+            previousFlyer();
+
+          }
 
         }
+
+
+        touchStartX =
+          null;
+
+
+        touchStartY =
+          null;
+
+
+        // Reset after browser finishes
+        // processing the touch/click.
+
+        setTimeout(
+          () => {
+
+            touchMoved =
+              false;
+
+          },
+
+          100
+        );
 
       },
 
@@ -435,10 +813,10 @@
 
 
     // ==========================================
-    // KEYBOARD ARROWS
+    // KEYBOARD SUPPORT
     // ==========================================
     //
-    // Useful for testing on computer.
+    // Useful when testing on your computer.
     // ==========================================
 
     document.addEventListener(
@@ -447,7 +825,8 @@
       event => {
 
         if (
-          event.key === "ArrowRight"
+          event.key ===
+          "ArrowRight"
         ) {
 
           nextFlyer();
@@ -456,10 +835,21 @@
 
 
         if (
-          event.key === "ArrowLeft"
+          event.key ===
+          "ArrowLeft"
         ) {
 
           previousFlyer();
+
+        }
+
+
+        if (
+          event.key ===
+          "Enter"
+        ) {
+
+          showHomeButton();
 
         }
 
@@ -468,12 +858,48 @@
 
 
     // ==========================================
+    // PRELOAD FLYERS
+    // ==========================================
+
+    function preloadFlyers() {
+
+      flyers.forEach(
+        source => {
+
+          const image =
+            new Image();
+
+
+          image.src =
+            source;
+
+        }
+      );
+
+    }
+
+
+    // ==========================================
     // START
     // ==========================================
 
-    showFlyer(0);
+    function startSlideshow() {
 
-    restartTimer();
+      preloadFlyers();
+
+
+      showFlyer(
+        0,
+        false
+      );
+
+
+      startAutoAdvance();
+
+    }
+
+
+    startSlideshow();
 
   </script>
 
