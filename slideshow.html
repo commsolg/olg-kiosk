@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -18,8 +17,7 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    html,
-    body {
+    html, body {
       width: 100%;
       height: 100%;
       overflow: hidden;
@@ -34,28 +32,21 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      overflow: hidden;
       background: #000;
+      overflow: hidden;
     }
-
-    /* FLYER */
 
     #flyer {
       position: absolute;
       inset: 0;
-
       width: 100%;
       height: 100%;
-
       object-fit: contain;
       object-position: center;
-
       display: block;
       background: #000;
-
       opacity: 1;
       transition: opacity 0.3s ease;
-
       pointer-events: none;
     }
 
@@ -63,8 +54,7 @@
       opacity: 0;
     }
 
-    /* INVISIBLE TOUCH AREAS */
-
+    /* Invisible tap areas */
     .touch-zone {
       position: absolute;
       top: 0;
@@ -87,30 +77,23 @@
       width: 35%;
     }
 
-    /* HOME BUTTON */
-
+    /* Home button only appears after tapping center */
     #homeButton {
       position: fixed;
-
       bottom: 60px;
       left: 50%;
-
-      transform:
-        translateX(-50%)
-        translateY(20px);
+      transform: translateX(-50%) translateY(20px);
 
       padding: 20px 34px;
-
       border: none;
       border-radius: 50px;
 
-      background: rgba(0, 0, 0, 0.72);
+      background: rgba(0, 0, 0, 0.75);
       color: white;
 
       font-family: Arial, sans-serif;
       font-size: 26px;
       font-weight: bold;
-
       text-decoration: none;
 
       z-index: 100;
@@ -126,13 +109,8 @@
     #homeButton.visible {
       opacity: 1;
       pointer-events: auto;
-
-      transform:
-        translateX(-50%)
-        translateY(0);
+      transform: translateX(-50%) translateY(0);
     }
-
-    /* LOADING / ERROR */
 
     #message {
       position: fixed;
@@ -160,37 +138,13 @@
 
   <div id="slideshow">
 
-    <img
-      id="flyer"
-      alt="OLG Event Flyer"
-    >
+    <img id="flyer" alt="OLG Event Flyer">
 
-    <!-- Invisible navigation areas -->
+    <div id="leftZone" class="touch-zone"></div>
+    <div id="centerZone" class="touch-zone"></div>
+    <div id="rightZone" class="touch-zone"></div>
 
-    <div
-      id="leftZone"
-      class="touch-zone"
-      aria-label="Previous flyer"
-    ></div>
-
-    <div
-      id="centerZone"
-      class="touch-zone"
-      aria-label="Show home button"
-    ></div>
-
-    <div
-      id="rightZone"
-      class="touch-zone"
-      aria-label="Next flyer"
-    ></div>
-
-    <!-- Home button -->
-
-    <a
-      id="homeButton"
-      href="index.html"
-    >
+    <a id="homeButton" href="index.html">
       ⌂ Home
     </a>
 
@@ -203,134 +157,144 @@
 
   <script>
 
-    // ==========================================
-    // SETTINGS
-    // ==========================================
+    /* =========================
+       SETTINGS
+       ========================= */
 
-    // Automatically change every 15 seconds
+    const CLOUD_NAME = "fxeaggsf";
+    const FLYER_TAG = "olg-kiosk";
+
+    // Change flyer every 15 seconds
     const AUTO_ADVANCE_TIME = 15000;
+
+    // Check Cloudinary for new/deleted flyers every 60 seconds
+    const REFRESH_TIME = 60000;
 
     // Hide Home button after 4 seconds
     const HOME_HIDE_TIME = 4000;
 
-    // Minimum distance required for a swipe
     const SWIPE_THRESHOLD = 70;
 
 
-    // ==========================================
-    // ELEMENTS
-    // ==========================================
+    /* =========================
+       ELEMENTS
+       ========================= */
 
-    const flyer =
-      document.getElementById("flyer");
+    const flyer = document.getElementById("flyer");
+    const message = document.getElementById("message");
 
-    const leftZone =
-      document.getElementById("leftZone");
+    const leftZone = document.getElementById("leftZone");
+    const centerZone = document.getElementById("centerZone");
+    const rightZone = document.getElementById("rightZone");
 
-    const centerZone =
-      document.getElementById("centerZone");
-
-    const rightZone =
-      document.getElementById("rightZone");
-
-    const homeButton =
-      document.getElementById("homeButton");
-
-    const message =
-      document.getElementById("message");
+    const homeButton = document.getElementById("homeButton");
 
 
-    // ==========================================
-    // STATE
-    // ==========================================
+    /* =========================
+       STATE
+       ========================= */
 
     let flyers = [];
-
     let currentIndex = 0;
-
     let autoTimer = null;
-
     let homeTimer = null;
 
     let touchStartX = null;
-
     let touchStartY = null;
-
     let touchMoved = false;
 
-    let changingSlide = false;
 
+    /* =========================
+       CLOUDINARY
+       ========================= */
 
-    // ==========================================
-    // LOAD FLYERS.JSON
-    // ==========================================
-
-    async function loadFlyers() {
+    async function loadFlyers(firstLoad = false) {
 
       try {
 
-        /*
-          The timestamp prevents the kiosk browser
-          from using an old cached copy of flyers.json.
-        */
+        const listURL =
+          `https://res.cloudinary.com/${CLOUD_NAME}/image/list/${FLYER_TAG}.json?t=${Date.now()}`;
 
-        const response = await fetch(
-          "flyers.json?t=" + Date.now(),
-          {
-            cache: "no-store"
-          }
-        );
-
+        const response = await fetch(listURL, {
+          cache: "no-store"
+        });
 
         if (!response.ok) {
-
-          throw new Error(
-            "Unable to load flyers.json"
-          );
-
+          throw new Error("Unable to load Cloudinary flyer list.");
         }
 
+        const data = await response.json();
 
-        const data =
-          await response.json();
-
-
-        if (!Array.isArray(data)) {
-
-          throw new Error(
-            "Invalid flyer list"
-          );
-
+        if (!data.resources || !Array.isArray(data.resources)) {
+          throw new Error("Invalid Cloudinary flyer list.");
         }
 
+        const newFlyers = data.resources.map(resource => {
 
-        flyers = data.filter(
-          item =>
-            typeof item === "string" &&
-            item.trim() !== ""
-        );
+          /*
+            Uses Cloudinary's optimized delivery.
+            f_auto = best image format for the kiosk browser
+            q_auto = efficient quality without manually compressing
+          */
+
+          return (
+            `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/` +
+            `f_auto,q_auto/` +
+            `v${resource.version}/` +
+            `${resource.public_id}.${resource.format}`
+          );
+
+        });
 
 
-        if (flyers.length === 0) {
+        if (newFlyers.length === 0) {
 
-          message.style.display =
-            "flex";
+          flyers = [];
 
+          message.style.display = "flex";
           message.textContent =
             "No flyers are currently available.";
 
-          return;
+          clearInterval(autoTimer);
 
+          return;
+        }
+
+
+        const oldCurrentFlyer = flyers[currentIndex];
+
+        flyers = newFlyers;
+
+
+        /*
+          If the current flyer still exists after a refresh,
+          keep showing it.
+        */
+
+        if (oldCurrentFlyer) {
+
+          const matchingIndex =
+            flyers.indexOf(oldCurrentFlyer);
+
+          if (matchingIndex !== -1) {
+            currentIndex = matchingIndex;
+          }
+          else {
+            currentIndex = 0;
+          }
+
+        }
+        else {
+          currentIndex = 0;
         }
 
 
         preloadFlyers();
 
 
-        showFlyer(
-          0,
-          false
-        );
+        if (firstLoad || !flyer.src) {
+          showFlyer(currentIndex, false);
+        }
 
 
         startAutoAdvance();
@@ -339,575 +303,327 @@
 
       catch (error) {
 
-        console.error(
-          "Flyer list error:",
-          error
-        );
+        console.error("Cloudinary error:", error);
 
+        /*
+          If flyers are already running, don't interrupt
+          the kiosk because of a temporary internet problem.
+        */
 
-        message.style.display =
-          "flex";
-
-
-        message.textContent =
-          "Unable to load OLG flyers.";
+        if (flyers.length === 0) {
+          message.style.display = "flex";
+          message.textContent =
+            "Unable to load OLG flyers.";
+        }
 
       }
 
     }
 
 
-    // ==========================================
-    // SHOW FLYER
-    // ==========================================
+    /* =========================
+       SHOW FLYER
+       ========================= */
 
-    function showFlyer(
-      index,
-      animate = true
-    ) {
+    function showFlyer(index, animate = true) {
 
       if (flyers.length === 0) {
-
         return;
-
       }
-
-
-      // Loop backward
 
       if (index < 0) {
-
-        index =
-          flyers.length - 1;
-
+        index = flyers.length - 1;
       }
-
-
-      // Loop forward
 
       if (index >= flyers.length) {
-
         index = 0;
-
       }
 
+      const nextURL = flyers[index];
 
-      if (changingSlide) {
+      const nextImage = new Image();
 
-        return;
+      nextImage.onload = () => {
 
-      }
+        message.style.display = "none";
 
+        const changeImage = () => {
 
-      changingSlide = true;
-
-
-      const nextImage =
-        new Image();
-
-
-      nextImage.onload =
-        () => {
-
-          message.style.display =
-            "none";
-
-
-          const finishChange =
-            () => {
-
-              currentIndex =
-                index;
-
-
-              flyer.src =
-                flyers[currentIndex];
-
-
-              flyer.classList.remove(
-                "fade"
-              );
-
-
-              changingSlide =
-                false;
-
-            };
-
-
-          if (animate) {
-
-            flyer.classList.add(
-              "fade"
-            );
-
-
-            setTimeout(
-              finishChange,
-              250
-            );
-
-          }
-
-          else {
-
-            finishChange();
-
-          }
+          currentIndex = index;
+          flyer.src = nextURL;
+          flyer.classList.remove("fade");
 
         };
 
 
-      nextImage.onerror =
-        () => {
+        if (animate && flyer.src) {
 
-          console.error(
-            "Unable to load flyer:",
-            flyers[index]
-          );
+          flyer.classList.add("fade");
 
+          setTimeout(changeImage, 250);
 
-          changingSlide =
-            false;
+        }
+        else {
 
+          changeImage();
 
-          /*
-            If one flyer is broken, skip it
-            instead of freezing the kiosk.
-          */
+        }
 
-          if (flyers.length > 1) {
-
-            currentIndex =
-              index;
+      };
 
 
-            setTimeout(
-              () => {
-                nextFlyer(false);
-              },
-              500
-            );
+      nextImage.onerror = () => {
 
-          }
+        console.error(
+          "Unable to load flyer:",
+          nextURL
+        );
 
-          else {
-
-            message.style.display =
-              "flex";
+      };
 
 
-            message.textContent =
-              "Unable to load flyer.";
-
-          }
-
-        };
-
-
-      nextImage.src =
-        flyers[index];
+      nextImage.src = nextURL;
 
     }
 
 
-    // ==========================================
-    // NEXT
-    // ==========================================
+    /* =========================
+       NEXT / PREVIOUS
+       ========================= */
 
-    function nextFlyer(
-      restart = true
-    ) {
+    function nextFlyer() {
 
-      showFlyer(
-        currentIndex + 1
-      );
-
-
-      if (restart) {
-
-        restartAutoAdvance();
-
-      }
-
-    }
-
-
-    // ==========================================
-    // PREVIOUS
-    // ==========================================
-
-    function previousFlyer() {
-
-      showFlyer(
-        currentIndex - 1
-      );
-
-
+      showFlyer(currentIndex + 1);
       restartAutoAdvance();
 
     }
 
 
-    // ==========================================
-    // AUTOMATIC ROTATION
-    // ==========================================
+    function previousFlyer() {
+
+      showFlyer(currentIndex - 1);
+      restartAutoAdvance();
+
+    }
+
+
+    /* =========================
+       AUTOMATIC SLIDESHOW
+       ========================= */
 
     function startAutoAdvance() {
 
-      clearInterval(
-        autoTimer
-      );
-
+      clearInterval(autoTimer);
 
       if (flyers.length <= 1) {
-
         return;
-
       }
 
+      autoTimer = setInterval(() => {
 
-      autoTimer =
-        setInterval(
-          () => {
+        showFlyer(currentIndex + 1);
 
-            showFlyer(
-              currentIndex + 1
-            );
-
-          },
-
-          AUTO_ADVANCE_TIME
-        );
+      }, AUTO_ADVANCE_TIME);
 
     }
 
 
     function restartAutoAdvance() {
 
-      clearInterval(
-        autoTimer
-      );
-
-
+      clearInterval(autoTimer);
       startAutoAdvance();
 
     }
 
 
-    // ==========================================
-    // HOME BUTTON
-    // ==========================================
+    /* =========================
+       HOME BUTTON
+       ========================= */
 
     function showHomeButton() {
 
-      homeButton.classList.add(
-        "visible"
-      );
+      homeButton.classList.add("visible");
 
+      clearTimeout(homeTimer);
 
-      clearTimeout(
-        homeTimer
-      );
+      homeTimer = setTimeout(() => {
 
+        homeButton.classList.remove("visible");
 
-      homeTimer =
-        setTimeout(
-          () => {
-
-            homeButton.classList.remove(
-              "visible"
-            );
-
-          },
-
-          HOME_HIDE_TIME
-        );
+      }, HOME_HIDE_TIME);
 
     }
 
 
-    // ==========================================
-    // TAP NAVIGATION
-    // ==========================================
+    /* =========================
+       TAP NAVIGATION
+       ========================= */
 
-    leftZone.addEventListener(
-      "click",
-      () => {
+    leftZone.addEventListener("click", () => {
 
-        if (!touchMoved) {
+      if (!touchMoved) {
+        previousFlyer();
+      }
 
-          previousFlyer();
+    });
 
-        }
+
+    rightZone.addEventListener("click", () => {
+
+      if (!touchMoved) {
+        nextFlyer();
+      }
+
+    });
+
+
+    centerZone.addEventListener("click", () => {
+
+      if (!touchMoved) {
+        showHomeButton();
+      }
+
+    });
+
+
+    /* =========================
+       SWIPE NAVIGATION
+       ========================= */
+
+    document.addEventListener("touchstart", event => {
+
+      if (!event.touches.length) {
+        return;
+      }
+
+      touchStartX = event.touches[0].clientX;
+      touchStartY = event.touches[0].clientY;
+      touchMoved = false;
+
+    }, { passive: true });
+
+
+    document.addEventListener("touchmove", event => {
+
+      if (touchStartX === null) {
+        return;
+      }
+
+      const deltaX =
+        event.touches[0].clientX - touchStartX;
+
+      const deltaY =
+        event.touches[0].clientY - touchStartY;
+
+
+      if (
+        Math.abs(deltaX) > 15 ||
+        Math.abs(deltaY) > 15
+      ) {
+
+        touchMoved = true;
 
       }
-    );
+
+    }, { passive: true });
 
 
-    rightZone.addEventListener(
-      "click",
-      () => {
+    document.addEventListener("touchend", event => {
 
-        if (!touchMoved) {
+      if (touchStartX === null) {
+        return;
+      }
 
+      const touch = event.changedTouches[0];
+
+      const deltaX =
+        touch.clientX - touchStartX;
+
+      const deltaY =
+        touch.clientY - touchStartY;
+
+
+      if (
+        Math.abs(deltaX) > Math.abs(deltaY) &&
+        Math.abs(deltaX) >= SWIPE_THRESHOLD
+      ) {
+
+        if (deltaX < 0) {
           nextFlyer();
-
         }
-
-      }
-    );
-
-
-    centerZone.addEventListener(
-      "click",
-      () => {
-
-        if (!touchMoved) {
-
-          showHomeButton();
-
-        }
-
-      }
-    );
-
-
-    // ==========================================
-    // TOUCH / SWIPE
-    // ==========================================
-
-    document.addEventListener(
-      "touchstart",
-
-      event => {
-
-        if (!event.touches.length) {
-
-          return;
-
-        }
-
-
-        touchStartX =
-          event.touches[0].clientX;
-
-
-        touchStartY =
-          event.touches[0].clientY;
-
-
-        touchMoved =
-          false;
-
-      },
-
-      {
-        passive: true
-      }
-    );
-
-
-    document.addEventListener(
-      "touchmove",
-
-      event => {
-
-        if (touchStartX === null) {
-
-          return;
-
-        }
-
-
-        const currentX =
-          event.touches[0].clientX;
-
-
-        const currentY =
-          event.touches[0].clientY;
-
-
-        const deltaX =
-          currentX - touchStartX;
-
-
-        const deltaY =
-          currentY - touchStartY;
-
-
-        if (
-          Math.abs(deltaX) > 15 ||
-          Math.abs(deltaY) > 15
-        ) {
-
-          touchMoved =
-            true;
-
-        }
-
-      },
-
-      {
-        passive: true
-      }
-    );
-
-
-    document.addEventListener(
-      "touchend",
-
-      event => {
-
-        if (touchStartX === null) {
-
-          return;
-
-        }
-
-
-        const touch =
-          event.changedTouches[0];
-
-
-        const endX =
-          touch.clientX;
-
-
-        const endY =
-          touch.clientY;
-
-
-        const deltaX =
-          endX - touchStartX;
-
-
-        const deltaY =
-          endY - touchStartY;
-
-
-        if (
-          Math.abs(deltaX) >
-            Math.abs(deltaY) &&
-
-          Math.abs(deltaX) >=
-            SWIPE_THRESHOLD
-        ) {
-
-
-          // Swipe LEFT = next
-
-          if (deltaX < 0) {
-
-            nextFlyer();
-
-          }
-
-
-          // Swipe RIGHT = previous
-
-          else {
-
-            previousFlyer();
-
-          }
-
-        }
-
-
-        touchStartX =
-          null;
-
-
-        touchStartY =
-          null;
-
-
-        setTimeout(
-          () => {
-
-            touchMoved =
-              false;
-
-          },
-
-          100
-        );
-
-      },
-
-      {
-        passive: true
-      }
-    );
-
-
-    // ==========================================
-    // KEYBOARD SUPPORT
-    // ==========================================
-
-    document.addEventListener(
-      "keydown",
-
-      event => {
-
-        if (
-          event.key === "ArrowRight"
-        ) {
-
-          nextFlyer();
-
-        }
-
-
-        if (
-          event.key === "ArrowLeft"
-        ) {
-
+        else {
           previousFlyer();
-
-        }
-
-
-        if (
-          event.key === "Enter"
-        ) {
-
-          showHomeButton();
-
         }
 
       }
-    );
 
 
-    // ==========================================
-    // PRELOAD IMAGES
-    // ==========================================
+      touchStartX = null;
+      touchStartY = null;
+
+
+      setTimeout(() => {
+        touchMoved = false;
+      }, 100);
+
+    }, { passive: true });
+
+
+    /* =========================
+       KEYBOARD
+       ========================= */
+
+    document.addEventListener("keydown", event => {
+
+      if (event.key === "ArrowRight") {
+        nextFlyer();
+      }
+
+      if (event.key === "ArrowLeft") {
+        previousFlyer();
+      }
+
+      if (event.key === "Enter") {
+        showHomeButton();
+      }
+
+    });
+
+
+    /* =========================
+       PRELOAD
+       ========================= */
 
     function preloadFlyers() {
 
-      flyers.forEach(
-        source => {
+      flyers.forEach(source => {
 
-          const image =
-            new Image();
+        const image = new Image();
+        image.src = source;
 
-
-          image.src =
-            source;
-
-        }
-      );
+      });
 
     }
 
 
-    // ==========================================
-    // START
-    // ==========================================
+    /* =========================
+       START
+       ========================= */
 
-    loadFlyers();
+    loadFlyers(true);
+
+    /*
+      Automatically check Cloudinary every minute.
+
+      This means you don't need to edit GitHub when
+      flyers are added or removed.
+    */
+
+    setInterval(() => {
+
+      loadFlyers(false);
+
+    }, REFRESH_TIME);
 
   </script>
 
