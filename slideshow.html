@@ -486,6 +486,7 @@
           !flyer.src
         ) {
 
+          currentIndex = getSyncedIndex();
           showFlyer(
             currentIndex,
             false
@@ -661,7 +662,7 @@
       );
 
 
-      restartAutoAdvance();
+      // Manual navigation is temporary; the next clock sync rejoins all kiosks.
 
     }
 
@@ -677,7 +678,7 @@
       );
 
 
-      restartAutoAdvance();
+      // Manual navigation is temporary; the next clock sync rejoins all kiosks.
 
     }
 
@@ -685,6 +686,21 @@
     // ==========================================
     // AUTOMATIC ROTATION
     // ==========================================
+
+    function getSyncedIndex() {
+      if (flyers.length === 0) return 0;
+      return Math.floor(Date.now() / AUTO_ADVANCE_TIME) % flyers.length;
+    }
+
+
+    function syncToClock(animate = true) {
+      if (flyers.length === 0) return;
+      const syncedIndex = getSyncedIndex();
+      if (syncedIndex !== currentIndex || !flyer.src) {
+        showFlyer(syncedIndex, animate);
+      }
+    }
+
 
     function startAutoAdvance() {
 
@@ -702,17 +718,17 @@
       }
 
 
+      // All kiosks use the same wall-clock 15-second slots.
+      // This means a kiosk returning from Home immediately rejoins
+      // the same flyer position as every other kiosk.
+      syncToClock(false);
+
       autoTimer =
         setInterval(
           () => {
-
-            showFlyer(
-              currentIndex + 1
-            );
-
+            syncToClock(true);
           },
-
-          AUTO_ADVANCE_TIME
+          1000
         );
 
     }
