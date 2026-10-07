@@ -120,7 +120,7 @@
         <div>
           <p class="eyebrow">Helotes, Texas</p>
           <h1>Our Lady <em>of</em> Guadalupe</h1>
-          <p>Welcome. Touch an option below to begin.</p>
+          <p class="hero-instruction">Welcome. Touch an option below to begin.</p>
         </div>
       </div>
     </header>
@@ -297,16 +297,16 @@
       updateStaticLanguage();makeBars();renderEvents();renderMinistries();if(activeEventId)openEvent(activeEventId,false);if(activeMinistryId)openMinistry(activeMinistryId,false);
       document.querySelectorAll(".home-grid [data-open]").forEach(button=>{const copy=HOME_LABELS[button.dataset.open][language];button.querySelector(".card-title").textContent=copy[0];button.querySelector(".card-subtitle").textContent=copy[1]});
       document.querySelector(".hero h1").innerHTML=language==="es"?"Nuestra Señora <em>de</em> Guadalupe":"Our Lady <em>of</em> Guadalupe";
-      document.querySelector(".hero p").textContent=language==="es"?TRANSLATIONS["Welcome. Touch an option below to begin."]:"Welcome. Touch an option below to begin.";
+      document.querySelector(".hero-instruction").textContent=language==="es"?TRANSLATIONS["Welcome. Touch an option below to begin."]:"Welcome. Touch an option below to begin.";
       document.querySelector(".home-heading span").textContent=language==="es"?TRANSLATIONS["Parish Welcome Center"]:"Parish Welcome Center";
       document.querySelector(".home-heading h2").textContent=language==="es"?TRANSLATIONS["How may we help you?"]:"How may we help you?";
     }
     document.getElementById("language-toggle").addEventListener("click",()=>{language=language==="en"?"es":"en";updateLanguage()});
     // INACTIVITY BEHAVIOR
     // Internal pages: return to Home after 90 seconds.
-    // Home page: return to the flyer slideshow after 90 seconds.
+    // Home page: return to the flyer slideshow after 60 seconds.
     const INTERNAL_INACTIVITY = 90 * 1000;
-    const HOME_INACTIVITY = 90 * 1000;
+    const HOME_INACTIVITY = 60 * 1000;
 
     let timer;
 
@@ -315,7 +315,7 @@
 
       if (current === "home") {
         timer = setTimeout(() => {
-          window.location.href = "slideshow.html";
+          window.location.replace("slideshow.html");
         }, HOME_INACTIVITY);
       } else {
         timer = setTimeout(() => {
