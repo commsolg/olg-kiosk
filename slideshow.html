@@ -98,12 +98,13 @@
     #homeButton {
       position: fixed;
 
-      bottom: 60px;
+      top: 50%;
       left: 50%;
+      bottom: auto;
 
       transform:
-        translateX(-50%)
-        translateY(20px);
+        translate(-50%, -50%)
+        scale(.96);
 
       padding: 20px 34px;
 
@@ -134,8 +135,8 @@
       pointer-events: auto;
 
       transform:
-        translateX(-50%)
-        translateY(0);
+        translate(-50%, -50%)
+        scale(1);
     }
 
     /* =========================
@@ -294,6 +295,46 @@
     let touchStartY = null;
 
     let touchMoved = false;
+
+    // Shared Internet clock so separate kiosks do not depend only on
+    // their individual device clocks.
+    let networkClockOffset = 0;
+
+    function syncedNow() {
+      return Date.now() + networkClockOffset;
+    }
+
+    async function syncNetworkClock() {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 3500);
+
+      try {
+        const started = Date.now();
+        const response = await fetch(
+          "https://worldtimeapi.org/api/timezone/Etc/UTC",
+          { cache: "no-store", signal: controller.signal }
+        );
+
+        if (!response.ok) throw new Error("Time service unavailable");
+
+        const data = await response.json();
+        const finished = Date.now();
+
+        if (typeof data.unixtime !== "number") {
+          throw new Error("Invalid time response");
+        }
+
+        const midpointLocal = started + ((finished - started) / 2);
+        networkClockOffset = (data.unixtime * 1000) - midpointLocal;
+
+        syncToClock(false);
+      } catch (error) {
+        console.warn("Internet clock unavailable; using device clock.", error);
+      } finally {
+        clearTimeout(timeout);
+      }
+    }
+
 
 
     // ==========================================
@@ -689,7 +730,7 @@
 
     function getSyncedIndex() {
       if (flyers.length === 0) return 0;
-      return Math.floor(Date.now() / AUTO_ADVANCE_TIME) % flyers.length;
+      return Math.floor(syncedNow() / AUTO_ADVANCE_TIME) % flyers.length;
     }
 
 
@@ -704,45 +745,35 @@
 
     function startAutoAdvance() {
 
-      clearInterval(
-        autoTimer
-      );
+      clearInterval(autoTimer);
+      clearTimeout(autoTimer);
 
-
-      if (
-        flyers.length <= 1
-      ) {
-
+      if (flyers.length <= 1) {
         return;
-
       }
 
-
-      // All kiosks use the same wall-clock 15-second slots.
-      // This means a kiosk returning from Home immediately rejoins
-      // the same flyer position as every other kiosk.
+      // Immediately join the same shared 15-second slot as every kiosk.
       syncToClock(false);
 
-      autoTimer =
-        setInterval(
-          () => {
-            syncToClock(true);
-          },
-          1000
-        );
+      function scheduleNextBoundary() {
+        clearTimeout(autoTimer);
 
+        const now = syncedNow();
+        const remaining =
+          AUTO_ADVANCE_TIME - (now % AUTO_ADVANCE_TIME) + 35;
+
+        autoTimer = setTimeout(() => {
+          syncToClock(true);
+          scheduleNextBoundary();
+        }, remaining);
+      }
+
+      scheduleNextBoundary();
     }
 
 
     function restartAutoAdvance() {
-
-      clearInterval(
-        autoTimer
-      );
-
-
       startAutoAdvance();
-
     }
 
 
@@ -1087,10 +1118,31 @@
     // START KIOSK
     // ==========================================
 
-    loadFlyers(
-      true
-    );
+    (async function startKiosk() {
+      await syncNetworkClock();
+      await loadFlyers(true);
+    })();
 
+
+
+    // Refresh the shared clock periodically.
+    setInterval(syncNetworkClock, 5 * 60 * 1000);
+
+    // Whenever the kiosk returns from Home or wakes up, immediately snap
+    // back to the same flyer position as the other kiosk.
+    window.addEventListener("pageshow", () => {
+      syncNetworkClock();
+      syncToClock(false);
+      startAutoAdvance();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        syncNetworkClock();
+        syncToClock(false);
+        startAutoAdvance();
+      }
+    });
 
     // ==========================================
     // CHECK CLOUDINARY FOR CHANGES
