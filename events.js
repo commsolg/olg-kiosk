@@ -457,8 +457,21 @@ window.OLG_EVENT_ES = {
   }
 };
 window.OLG_BULLETIN_DATE = "November 8, 2026";
+window.OLG_BULLETIN_DATE_ES = "8 de noviembre de 2026";
 /* Optional kiosk additions; the public hub does not load this helper. */
 if (typeof document !== 'undefined') {
+ function syncBulletinHeading() {
+  const intro = document.querySelector('#view-events .intro');
+  if (!intro) return;
+  const es = document.documentElement.lang === 'es';
+  intro.querySelector('.kicker').textContent = es ? 'Boletín del ' + window.OLG_BULLETIN_DATE_ES : window.OLG_BULLETIN_DATE + ' Bulletin';
+  intro.querySelector('h2+p').textContent = es ? 'Volantes y detalles actuales del boletín del 8 de noviembre. Toque un evento para saber más.' : 'Current flyers and details from the November 8 bulletin. Touch an event to learn more.';
+ }
+ const syncKioskBulletin = () => {
+  syncBulletinHeading();
+  if (document.getElementById('events-grid')) new MutationObserver(syncBulletinHeading).observe(document.documentElement, {attributes:true, attributeFilter:['lang']});
+ };
+ if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', syncKioskBulletin, {once:true}); else syncKioskBulletin();
  const kioskHelperURL = new URL('events/kiosk.js', document.currentScript.src);
  const loadKioskHelper = () => { if (document.getElementById('events-grid')) { const script=document.createElement('script'); script.src=kioskHelperURL.href; document.head.append(script); } };
  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',loadKioskHelper,{once:true}); else loadKioskHelper();
