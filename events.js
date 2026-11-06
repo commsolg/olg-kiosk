@@ -1,40 +1,22 @@
-/* Shared data for public Events Hub and kiosk. */
+/* Shared data for public Events Hub and kiosk. Updated November 6, 2026.
+ * Sources: November 8 parish bulletin; current archsa.org/assembly/ venue notice.
+ * Calendar conflicts are resolved in favor of the newer bulletin/official notice. */
 window.OLG_EVENTS = [
-  {
-    "id": "all-saints",
-    "title": "All Saints Children's Mass",
-    "date": "Sunday, November 1, 2026",
-    "time": "11:30 AM",
-    "location": "OLG Church",
-    "description": "Children are invited to attend Mass dressed as their favorite saint for the Solemnity of All Saints.",
-    "image": "flyers/events/all-saints.webp"
-  },
-  {
-    "id": "all-souls",
-    "title": "All Souls Masses & Cemetery Blessing",
-    "date": "Monday, November 2, 2026",
-    "time": "8:30 AM English; 9:30 AM grave blessing; 6:30 PM Spanish",
-    "location": "OLG Church; parish cemetery on Bandera Road",
-    "description": "Submit the names of deceased loved ones using the flyer QR code. Names will be placed before the altar during the All Souls Masses.",
-    "image": "flyers/events/all-souls.webp"
-  },
   {
     "id": "confessions",
     "title": "Confession Schedule Changes",
-    "date": "November 5, 7 & 11, 2026",
-    "time": "Nov. 5: 6:00–8:00 PM; Nov. 7: none; beginning Nov. 11: Wednesdays 6:00–9:00 PM",
-    "location": "OLG Parish",
-    "description": "Confessions are also available by appointment with a priest; call the parish office to schedule.",
-    "image": "flyers/events/confessions.webp"
-  },
-  {
-    "id": "night",
-    "title": "Night of Worship",
-    "date": "Thursday, November 5, 2026",
-    "time": "7:00 PM; Confessions 6:00–8:00 PM",
-    "location": "OLG Church",
-    "description": "Join the parish for an evening of worship and prayer.",
-    "image": "flyers/events/night.webp"
+    "date": "Beginning Wednesday, November 11, 2026",
+    "time": "Wednesdays 6:00–9:00 PM",
+    "location": "OLG Church and Chapel",
+    "description": "The new confession schedule begins Wednesday, November 11, from 6:00–9:00 PM. Confession is also available by appointment with a priest; call the parish office to schedule. There are no confessions on Saturday, November 7.",
+    "image": "event-20261108-confessions.jpg",
+    "links": [
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
+      }
+    ]
   },
   {
     "id": "adoration",
@@ -42,10 +24,17 @@ window.OLG_EVENTS = [
     "date": "Every Thursday",
     "time": "9:00 AM–9:00 PM",
     "location": "OLG Chapel",
-    "description": "Spend quiet time with Jesus. Sign up for an hour using the flyer QR code.",
-    "image": "flyers/events/adoration.webp",
+    "description": "Thursday Eucharistic Adoration is 9:00 AM–9:00 PM in the chapel. On Night of Worship Thursdays, Adoration ends at 7:00 PM. Sign up in the foyer or use the registration link.",
+    "image": "event-20261108-adoration.jpg",
     "flyerLinks": [
       "https://docs.google.com/forms/d/e/1FAIpQLSenHRgq_AMWWnxmRInlygJt-0exiqYax-PM5UaRTEdu3Scc7Q/viewform"
+    ],
+    "links": [
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
+      }
     ]
   },
   {
@@ -105,59 +94,22 @@ window.OLG_EVENTS = [
   },
   {
     "id": "centennial",
-    "title": "Centennial Celebration",
+    "title": "Centennial Celebration — New Indoor Location",
     "date": "Saturday, November 7, 2026",
-    "time": "Gates open 3:00 PM; Mass 4:00 PM",
-    "location": "Nelson W. Wolff Stadium, 5757 US-90, San Antonio, TX 78227",
-    "description": "Celebrate the Centennial Mass and the proclamation of the new Pastoral Vision. Admission is free and everyone is welcome. Reserve seats in advance.\n\nDoors open at 3:00 PM; Mass begins at 4:00 PM on Saturday, November 7, 2026.\n\nParish bus: reserve tickets using the link below. The bus departs from the church at 2:30 PM.\n\nWear your teal OLG T-shirt. Shirt pickup: Sunday, November 1, 10:00 AM–2:00 PM, in the main campus pavilion next to the church.\n\nArrive early for screening at every gate. All entry gates are accessible. Enter parking through the reserved/general parking entrance. Review the official visitor guide and maps below for parking, bag restrictions, food, water, medications, seating and processions.",
-    "image": "flyers/events/centennial.webp",
+    "time": "Arrival requested 2:30 PM; doors 3:00 PM; procession 3:30 PM; Mass 4:00 PM",
+    "location": "Greehey Arena at St. Mary’s University, 1 Camino Santa Maria, San Antonio, TX 78228",
+    "description": "The Archdiocese has moved the November 7 Centennial Celebration indoors because of the weather forecast. The date and Mass time remain unchanged. Admission is free; reserve seats using the official link.\n\nArchbishop Gustavo requests arrival at 2:30 PM. Doors open at 3:00 PM; the pre-liturgical procession begins at 3:30 PM and Mass at 4:00 PM. The new Archdiocesan Pastoral Vision will be proclaimed.\n\nParish activities, including Saturday vigil Masses, are canceled for this celebration. Consult the Archdiocese’s current page for venue updates. The former Wolff Stadium maps and visitor rules no longer apply.",
+    "image": "event-20261108-centennial-greehey.webp",
     "links": [
       {
-        "label": "Full Centennial information",
-        "labelEs": "Información completa del centenario",
-        "url": "https://commsolg.github.io/Centennial-Cele/"
+        "label": "Current official Centennial information",
+        "labelEs": "Información oficial actualizada del centenario",
+        "url": "https://archsa.org/assembly/"
       },
       {
         "label": "Reserve seats",
         "labelEs": "Reservar asientos",
         "url": "https://archsa.regfox.com/assembly2026"
-      },
-      {
-        "label": "Reserve parish bus tickets",
-        "labelEs": "Reservar boletos del autobús parroquial",
-        "url": "https://pci.jotform.com/form/262943971308061"
-      },
-      {
-        "label": "Centennial video 1",
-        "labelEs": "Video del centenario 1",
-        "url": "https://www.youtube.com/watch?v=TQlAMNv1D6Q"
-      },
-      {
-        "label": "Centennial video 2",
-        "labelEs": "Video del centenario 2",
-        "url": "https://youtu.be/xBdDQHkp_I0"
-      },
-      {
-        "label": "Archdiocesan celebration information",
-        "labelEs": "Información de la celebración arquidiocesana",
-        "url": "https://www.archsa.org/assembly"
-      }
-    ],
-    "gallery": [
-      {
-        "image": "flyers/events/centennial-guide-1.png",
-        "caption": "Official stadium parking map",
-        "captionEs": "Mapa oficial de estacionamiento del estadio"
-      },
-      {
-        "image": "flyers/events/centennial-guide-2.png",
-        "caption": "Official visitor guide: entry, bags, food, water and medications",
-        "captionEs": "Guía oficial: entrada, bolsas, alimentos, agua y medicamentos"
-      },
-      {
-        "image": "flyers/events/centennial-guide-3.png",
-        "caption": "Official stadium seating and procession layout",
-        "captionEs": "Plano oficial de asientos y procesiones"
       }
     ]
   },
@@ -174,10 +126,22 @@ window.OLG_EVENTS = [
     "id": "thanksgiving",
     "title": "St. Vincent de Paul Thanksgiving Food Drive",
     "date": "November 8–22, 2026",
-    "time": "Before and after weekend Masses",
+    "time": "After Mass on the listed dates",
     "location": "OLG Parish",
-    "description": "Pick up Thanksgiving bags November 8–22. Return filled bags November 14–22. Volunteers will be available before and after Mass.",
-    "image": "flyers/events/thanksgiving.webp"
+    "description": "Pick up bags from St. Vincent de Paul volunteers after Mass on November 8, 14 and 15. Return filled bags after Mass on November 14, 15, 21 and 22.\n\nFood drive committee: Lydia Villarreal, 361-960-7118; Mark Villarreal, 361-728-7396.",
+    "image": "event-20261108-thanksgiving-drive.jpg",
+    "links": [
+      {
+        "label": "Food drive information",
+        "labelEs": "Información de la colecta",
+        "url": "https://www.svdphelotes.org/thanksgiving-food-drive"
+      },
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
+      }
+    ]
   },
   {
     "id": "baptism",
@@ -189,6 +153,13 @@ window.OLG_EVENTS = [
     "image": "flyers/events/baptism.webp",
     "flyerLinks": [
       "https://giving.myparishsoft.io/App/Form/d57ed8ec-2894-48e1-8f81-a710435a1d4e"
+    ],
+    "links": [
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
+      }
     ]
   },
   {
@@ -201,6 +172,13 @@ window.OLG_EVENTS = [
     "image": "flyers/events/marriage.webp",
     "flyerLinks": [
       "https://pci.jotform.com/form/262735191440152"
+    ],
+    "links": [
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
+      }
     ]
   },
   {
@@ -213,28 +191,14 @@ window.OLG_EVENTS = [
     "image": "flyers/events/altar.webp",
     "flyerLinks": [
       "https://form.jotform.com/262294302419051"
+    ],
+    "links": [
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
+      }
     ]
-  },
-  {
-    "id": "retreat",
-    "title": "Life Teen Retreat: Fire Within",
-    "date": "January 22–24, 2027",
-    "time": "See flyer QR code for details",
-    "location": "Deer Creek Camp, Medina, TX",
-    "description": "Guadalupe Youth Life Teen retreat. Scan the flyer QR code for information.",
-    "image": "flyers/events/retreat.webp",
-    "flyerLinks": [
-      "https://pci.jotform.com/form/262674034227153"
-    ]
-  },
-  {
-    "id": "youth-shirts",
-    "title": "Guadalupe Youth T-Shirt Fundraiser",
-    "date": "Presale",
-    "time": "Order using the flyer QR code",
-    "location": "OLG Parish",
-    "description": "Our Lady of Guadalupe shirts are $20 each, presale only. Proceeds support youth events, retreats and programs.",
-    "image": "flyers/events/youth-shirts.webp"
   },
   {
     "id": "pilgrim-mary",
@@ -246,112 +210,152 @@ window.OLG_EVENTS = [
     "image": "flyers/events/pilgrim-mary.webp",
     "flyerLinks": [
       "https://form.jotform.com/262284040134043"
+    ],
+    "links": [
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
+      }
     ]
   },
   {
     "id": "emmaus",
     "title": "Emmaus: Faith-Filled Conversations",
-    "date": "November 1, 2026 reflections",
-    "time": "Watch online",
+    "date": "Weekly broadcasts and on-demand reflections",
+    "time": "English: Monday 11:30 AM, Wednesday 7:30 PM; Spanish: Thursday 10:30 AM, Sunday 2:30 PM",
     "location": "CTSA / Catholic Television of San Antonio",
-    "description": "Prepare for Sunday Mass with Emmaus. English episode: November 1, 2026, Matthew 5:1–12a. Spanish episode: 1 de noviembre, Mateo 5, 1–12. Choose a video below.",
-    "image": "flyers/events/emmaus.webp",
+    "description": "Prepare for Sunday Mass with Emmaus / Emaús on CTSA. Watch on Spectrum Channel 15, stream through CTSAlive.TV or use the CTSA app for on-demand episodes. The bulletin does not identify a specific November 8 episode link.",
+    "image": "event-20261108-emmaus-schedule.jpg",
     "links": [
       {
-        "label": "Watch Emmaus in English",
-        "labelEs": "Ver Emmaus en inglés",
-        "url": "https://videoplayer.telvue.com/player/uU1d0Mt7wHmWO80fFgbtyln4HFnLdVna/series/6413/media/1065568"
+        "label": "CTSA streaming and on-demand information",
+        "labelEs": "CTSA: transmisiones y contenido a la carta",
+        "url": "https://ctsalive.tv/"
       },
       {
-        "label": "Ver Emaús en español",
-        "labelEs": "Ver Emaús en español",
-        "url": "https://videoplayer.telvue.com/player/uU1d0Mt7wHmWO80fFgbtyln4HFnLdVna/series/6417/media/1066178"
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
       }
     ]
   },
   {
-    "id": "bible-story",
-    "title": "Bible Story Time",
-    "date": "See flyer for details",
-    "time": "",
-    "location": "OLG Parish",
-    "description": "Touch the flyer to view the information and QR codes.",
-    "image": "flyers/events/bible-story.webp"
-  },
-  {
-    "id": "centennial-shirts",
-    "title": "Centennial Celebration Shirts",
-    "date": "See flyer for details",
-    "time": "",
-    "location": "OLG Parish",
-    "description": "Touch the flyer to view the information and QR codes.",
-    "image": "flyers/events/centennial-shirts.webp",
-    "flyerLinks": [
-      "https://www.wesharegiving.org/App/Form/a223f9fc-2929-48d6-816e-2734e2623e66",
-      "https://pci.jotform.com/form/262943971308061",
-      "https://archsa.org/assembly/"
-    ]
-  },
-  {
-    "id": "shirt-pickup",
-    "title": "T-Shirt Order Pick-Up",
-    "date": "See flyer for details",
-    "time": "",
-    "location": "OLG Parish",
-    "description": "Touch the flyer to view the information and QR codes.",
-    "image": "flyers/events/shirt-pickup.webp"
-  },
-  {
-    "id": "vocations",
-    "title": "National Vocation Awareness Week",
-    "date": "See flyer for details",
-    "time": "",
-    "location": "OLG Parish",
-    "description": "Touch the flyer to view the information and QR codes.",
-    "image": "flyers/events/vocations.webp"
-  },
-  {
     "id": "ocia-volunteers",
     "title": "OCIA Volunteers",
-    "date": "Volunteer opportunity",
-    "time": "",
+    "date": "Volunteer opportunity; Sunday sessions",
+    "time": "Sundays 10:30 AM–12:30 PM",
     "location": "Our Lady of Guadalupe Parish",
-    "description": "Support the Order of Christian Initiation of Adults (OCIA) at Our Lady of Guadalupe. Dedicated Catholics are invited to discuss and share their faith with people preparing to become fully initiated members of the Catholic Church.\n\nOCIA uses small discussion groups rather than lectures. Volunteers receive preparation guides, leadership development and support; advanced Catholic education is not required.\n\nUse the volunteer interest form to provide your name and contact information so the team can follow up. The form also includes preferred contact method and comments. No meeting date, time or volunteer deadline is listed.",
-    "image": "flyers/events/ocia-volunteers.svg",
+    "description": "Volunteers are needed to facilitate OCIA formation sessions, welcome inquirers and share faith through conversation. OCIA meets every Sunday from 10:30 AM–12:30 PM.\n\nTo volunteer or learn more, contact Deacon Dan Quaderer: 210-386-5474; dquaderer@satx.rr.com. The volunteer interest form is also available below.",
+    "image": "event-20261108-ocia.jpg",
     "links": [
       {
         "label": "OCIA volunteer interest form",
         "labelEs": "Formulario de interés para voluntarios de OCIA",
         "url": "https://giving.myparishsoft.io/App/Form/131ee265-6bee-491d-a26f-3d452ad0efc8"
+      },
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
+      }
+    ]
+  },
+  {
+    "id": "salve-regina",
+    "title": "Salve Regina",
+    "date": "Thursday, November 12, 2026",
+    "time": "6:30–7:30 PM",
+    "location": "OLG Church, 13715 Riggs Rd., Helotes",
+    "description": "Honor Our Lady of Guadalupe with faith, devotion and community. Matlachines, catechesis and testimonies. All are welcome. Held on the 12th of each month.",
+    "image": "event-20261108-salve-regina.jpg",
+    "links": [
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
+      }
+    ]
+  },
+  {
+    "id": "fiat-yard-sale",
+    "title": "FIAT Young Adults Yard Sale",
+    "date": "Saturday, November 14, 2026",
+    "time": "9:00 AM–6:00 PM",
+    "location": "The Annex of Our Lady of Guadalupe, 11762 FM 1560, Helotes, TX 78023",
+    "description": "Shop, donate and support our young adults at the yard sale hosted by FIAT.",
+    "image": "event-20261108-fiat-yard-sale.jpg",
+    "links": [
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
+      }
+    ]
+  },
+  {
+    "id": "holiday-loteria",
+    "title": "Knights of Columbus Holiday Lotería Night",
+    "date": "Saturday, November 21, 2026",
+    "time": "7:00–9:00 PM; doors open 6:30 PM",
+    "location": "OLG Parish Hall",
+    "description": "An evening of Mexican Bingo, fellowship and prizes. Tickets are $15 for 15 games; two separate premium games cost extra. Drinks and snacks available for purchase. Spanish is not required. Seating is limited. Tickets outside church or call Bro. Steve, 210-363-1777.",
+    "image": "event-20261108-holiday-loteria.jpg",
+    "links": [
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
+      }
+    ]
+  },
+  {
+    "id": "thanksgiving-mass",
+    "title": "Thanksgiving Day Bilingual Mass",
+    "date": "Thursday, November 26, 2026",
+    "time": "10:00 AM",
+    "location": "OLG Church",
+    "description": "Bring the bread and wine you will use on your Thanksgiving table so Father may bless them during Mass.",
+    "image": "event-20261108-thanksgiving-mass.jpg",
+    "links": [
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
+      }
+    ]
+  },
+  {
+    "id": "adoration-after-mass",
+    "title": "Adoration After Sunday Masses",
+    "date": "Sunday, November 8, 2026",
+    "time": "After Sunday Masses",
+    "location": "OLG Church",
+    "description": "Stay after Mass for personal prayer with Jesus. The November 8 parish bulletin lists Adoration after all Sunday Masses.",
+    "image": "event-20261108-adoration.jpg",
+    "links": [
+      {
+        "label": "November 8 parish bulletin",
+        "labelEs": "Boletín parroquial del 8 de noviembre",
+        "url": "https://bulletins.discovermass.com/download.php?bulletin=C6zbWeGgoC04S%2FAHtXqli%2BdxZ%2B4xDf9exXy4SiBG9qKaORFAxdPlukI2r0XGad7GJwdEEWeG33pTz14bnHVEdeVc0wjfknhjWuefawUiAMQ%3D"
       }
     ]
   }
 ];
 window.OLG_EVENT_ES = {
-  "all-saints": {
-    "title": "Misa de Todos los Santos para niños",
-    "date": "Domingo, 1 de noviembre de 2026",
-    "description": "Los niños están invitados a asistir a la misa de las 11:30 AM vestidos de su santo favorito."
-  },
-  "all-souls": {
-    "title": "Misas de los Fieles Difuntos y bendición del cementerio",
-    "date": "Lunes, 2 de noviembre de 2026",
-    "description": "Misa en inglés a las 8:30 AM; bendición de tumbas en el cementerio de Bandera Road a las 9:30 AM; misa en español a las 6:30 PM. Envíe los nombres de sus difuntos mediante el código QR."
-  },
   "confessions": {
     "title": "Cambios en el horario de confesiones",
-    "date": "5, 7 y 11 de noviembre de 2026",
-    "description": "5 de noviembre: 6–8 PM; 7 de noviembre: no habrá confesiones. A partir del 11 de noviembre: miércoles de 6–9 PM. También por cita; llame a la oficina."
-  },
-  "night": {
-    "title": "Noche de Adoración",
-    "date": "Jueves, 5 de noviembre de 2026",
-    "description": "Acompáñenos a las 7 PM. Confesiones de 6–8 PM."
+    "date": "A partir del miércoles, 11 de noviembre de 2026",
+    "description": "El nuevo horario de confesiones comienza el miércoles 11 de noviembre, de 6:00–9:00 PM. También se ofrecen por cita con un sacerdote; llame a la oficina parroquial. No habrá confesiones el sábado 7 de noviembre.",
+    "time": "Miércoles de 6:00–9:00 PM",
+    "location": "Iglesia y capilla de OLG"
   },
   "adoration": {
     "title": "Adoración Eucarística de los jueves",
     "date": "Todos los jueves",
-    "description": "De 9 AM a 9 PM en la capilla. Inscríbase para una hora mediante el código QR."
+    "description": "Adoración Eucarística los jueves de 9:00 AM a 9:00 PM en la capilla. Los jueves de Noche de Adoración termina a las 7:00 PM. Inscríbase en el vestíbulo o mediante el enlace.",
+    "time": "9:00 AM–9:00 PM",
+    "location": "Capilla de OLG"
   },
   "pilgrimage": {
     "title": "Quinta Peregrinación de Cristo Rey",
@@ -365,10 +369,11 @@ window.OLG_EVENT_ES = {
     "description": "De 9:30 AM a 12 PM en el Salón Guadalupe, después de la misa de las 8:30 AM. Todos están invitados. Contacto: leticia.schweigert@gmail.com o 443-745-3563."
   },
   "centennial": {
-    "title": "Celebración del Centenario",
+    "title": "Celebración del Centenario — Nueva sede interior",
     "date": "Sábado, 7 de noviembre de 2026",
-    "description": "Celebre la Misa del Centenario y la proclamación de la nueva Visión Pastoral. La entrada es gratuita y todos son bienvenidos. Reserve sus asientos.\n\nLas puertas abren a las 3:00 PM; la Misa comienza a las 4:00 PM el sábado 7 de noviembre de 2026.\n\nAutobús parroquial: reserve boletos en el enlace de abajo. Sale de la iglesia a las 2:30 PM.\n\nUse su camiseta verde azulado de OLG. Recoja su camiseta el domingo 1 de noviembre, de 10:00 AM a 2:00 PM, en el pabellón del campus principal junto a la iglesia.\n\nLlegue temprano para la revisión de seguridad en cada entrada. Todas las entradas son accesibles. Use la entrada de estacionamiento reservado/general. Consulte la guía y los mapas oficiales para las normas sobre bolsas, alimentos, agua, medicamentos, asientos y procesiones.",
-    "location": "Estadio Nelson W. Wolff, 5757 US-90, San Antonio, TX 78227"
+    "description": "La Arquidiócesis trasladó la celebración del 7 de noviembre a un recinto interior debido al pronóstico del tiempo. La fecha y la hora de la Misa no cambian. La entrada es gratuita; reserve asientos mediante el enlace oficial.\n\nEl arzobispo Gustavo solicita llegar a las 2:30 PM. Las puertas abren a las 3:00 PM; la procesión prelitúrgica comienza a las 3:30 PM y la Misa a las 4:00 PM. Se proclamará la nueva Visión Pastoral arquidiocesana.\n\nSe cancelan las actividades parroquiales, incluidas las misas de vigilia del sábado, para esta celebración. Consulte la página actual de la Arquidiócesis. Los mapas y las normas anteriores del Estadio Wolff ya no corresponden.",
+    "location": "Greehey Arena, Universidad de St. Mary’s, 1 Camino Santa Maria, San Antonio, TX 78228",
+    "time": "Llegada solicitada 2:30 PM; puertas 3:00 PM; procesión 3:30 PM; Misa 4:00 PM"
   },
   "casino": {
     "title": "Gala benéfica Casino Royale",
@@ -378,7 +383,8 @@ window.OLG_EVENT_ES = {
   "thanksgiving": {
     "title": "Colecta de alimentos de Acción de Gracias",
     "date": "8–22 de noviembre de 2026",
-    "description": "Recoja bolsas del 8 al 22 de noviembre y devuélvalas llenas del 14 al 22. Voluntarios estarán disponibles antes y después de las misas del fin de semana."
+    "description": "Recoja bolsas de los voluntarios de San Vicente de Paúl después de las misas del 8, 14 y 15 de noviembre. Devuelva las bolsas llenas después de las misas del 14, 15, 21 y 22 de noviembre.\n\nComité de la colecta: Lydia Villarreal, 361-960-7118; Mark Villarreal, 361-728-7396.",
+    "time": "Después de las misas en las fechas indicadas"
   },
   "baptism": {
     "title": "Preparación para el Bautismo",
@@ -395,16 +401,6 @@ window.OLG_EVENT_ES = {
     "date": "Martes, 17 de noviembre de 2026",
     "description": "De 7:30–8:30 PM. Contacto: deaconmark@olghelotes.org. Inscríbase en el vestíbulo de la iglesia o mediante el QR."
   },
-  "retreat": {
-    "title": "Retiro de Life Teen: Fire Within",
-    "date": "22–24 de enero de 2027",
-    "description": "Retiro de Guadalupe Youth en Deer Creek Camp, Medina, TX. Consulte el código QR para más información."
-  },
-  "youth-shirts": {
-    "title": "Venta de camisetas para Guadalupe Youth",
-    "date": "Preventa",
-    "description": "Camisetas a $20 cada una, solo en preventa. Apoyan eventos, retiros y programas juveniles. Ordene mediante el QR."
-  },
   "pilgrim-mary": {
     "title": "Lleve a María a casa: Virgen Peregrina",
     "date": "Los sábados",
@@ -412,40 +408,55 @@ window.OLG_EVENT_ES = {
   },
   "emmaus": {
     "title": "Emaús: conversaciones de fe",
-    "date": "Reflexiones del 1 de noviembre de 2026",
-    "description": "Prepárese para la Misa dominical con Emaús. Episodio en inglés: November 1, 2026, Matthew 5:1–12a. Episodio en español: 1 de noviembre, Mateo 5, 1–12. Seleccione un video abajo.",
-    "time": "Ver en línea",
+    "date": "Transmisiones semanales y reflexiones a la carta",
+    "description": "Prepárese para la Misa dominical con Emmaus / Emaús en CTSA. Véalo en Spectrum Canal 15, en CTSAlive.TV o en la aplicación de CTSA con episodios a la carta. El boletín no identifica un enlace específico para el episodio del 8 de noviembre.",
+    "time": "Español: jueves 10:30 AM y domingo 2:30 PM; inglés: lunes 11:30 AM y miércoles 7:30 PM",
     "location": "CTSA / Televisión Católica de San Antonio"
-  },
-  "bible-story": {
-    "title": "Hora de historias bíblicas",
-    "date": "Consulte el cartel para más detalles",
-    "description": "Toque el cartel para ver la información y los códigos QR."
-  },
-  "centennial-shirts": {
-    "title": "Camisetas de la celebración del centenario",
-    "date": "Consulte el cartel para más detalles",
-    "description": "Toque el cartel para ver la información y los códigos QR."
-  },
-  "shirt-pickup": {
-    "title": "Recogida de camisetas",
-    "date": "Consulte el cartel para más detalles",
-    "description": "Toque el cartel para ver la información y los códigos QR."
-  },
-  "vocations": {
-    "title": "Semana Nacional de Concientización Vocacional",
-    "date": "Consulte el cartel para más detalles",
-    "description": "Toque el cartel para ver la información y los códigos QR."
   },
   "ocia-volunteers": {
     "title": "Voluntarios de OCIA",
-    "date": "Oportunidad de voluntariado",
-    "time": "",
+    "date": "Oportunidad de voluntariado; sesiones dominicales",
+    "time": "Domingos de 10:30 AM–12:30 PM",
     "location": "Parroquia Nuestra Señora de Guadalupe",
-    "description": "Apoye la Orden de Iniciación Cristiana de Adultos (OCIA) en Nuestra Señora de Guadalupe. Se invita a católicos comprometidos a conversar y compartir su fe con quienes se preparan para ser miembros plenamente iniciados de la Iglesia Católica.\n\nOCIA utiliza grupos pequeños de conversación, no conferencias. Se ofrecen guías de preparación, desarrollo de liderazgo y apoyo. No se requiere formación católica avanzada.\n\nComplete el formulario de interés con su nombre y datos de contacto para que el equipo se comunique con usted. También puede indicar su medio de contacto preferido y comentarios. No se indica fecha de reunión, horario ni plazo de voluntariado."
+    "description": "Se necesitan voluntarios para facilitar las sesiones de formación de OCIA, recibir a los interesados y compartir la fe mediante el diálogo. OCIA se reúne los domingos de 10:30 AM a 12:30 PM.\n\nPara ofrecerse como voluntario o recibir información: Diácono Dan Quaderer, 210-386-5474; dquaderer@satx.rr.com. También puede completar el formulario de interés."
+  },
+  "salve-regina": {
+    "title": "Salve Regina",
+    "date": "Jueves, 12 de noviembre de 2026",
+    "time": "6:30–7:30 PM",
+    "location": "Iglesia de OLG, 13715 Riggs Rd., Helotes",
+    "description": "Honremos a Nuestra Señora de Guadalupe con fe, devoción y comunidad. Matlachines, catequesis y testimonios. Todos son bienvenidos. Se celebra el día 12 de cada mes."
+  },
+  "fiat-yard-sale": {
+    "title": "Venta de garaje de FIAT Jóvenes Adultos",
+    "date": "Sábado, 14 de noviembre de 2026",
+    "time": "9:00 AM–6:00 PM",
+    "location": "El Anexo de Nuestra Señora de Guadalupe, 11762 FM 1560, Helotes, TX 78023",
+    "description": "Compre, done y apoye a nuestros jóvenes adultos en la venta organizada por FIAT."
+  },
+  "holiday-loteria": {
+    "title": "Noche de Lotería de los Caballeros de Colón",
+    "date": "Sábado, 21 de noviembre de 2026",
+    "time": "7:00–9:00 PM; puertas abren 6:30 PM",
+    "location": "Salón parroquial de OLG",
+    "description": "Una noche de lotería, convivencia y premios. Boletos: $15 por 15 juegos; dos juegos especiales tienen costo adicional. Bebidas y refrigerios a la venta. No es necesario hablar español. Cupo limitado. Boletos afuera de la iglesia o con el hermano Steve, 210-363-1777."
+  },
+  "thanksgiving-mass": {
+    "title": "Misa bilingüe de Acción de Gracias",
+    "date": "Jueves, 26 de noviembre de 2026",
+    "time": "10:00 AM",
+    "location": "Iglesia de OLG",
+    "description": "Traiga el pan y el vino que usará en su mesa de Acción de Gracias para que el padre los bendiga durante la Misa."
+  },
+  "adoration-after-mass": {
+    "title": "Adoración después de las misas dominicales",
+    "date": "Domingo, 8 de noviembre de 2026",
+    "time": "Después de las misas del domingo",
+    "location": "Iglesia de OLG",
+    "description": "Permanezca después de la Misa para orar personalmente con Jesús. El boletín parroquial del 8 de noviembre anuncia adoración después de todas las misas dominicales."
   }
 };
-window.OLG_BULLETIN_DATE = "October 25, 2026";
+window.OLG_BULLETIN_DATE = "November 8, 2026";
 /* Optional kiosk additions; the public hub does not load this helper. */
 if (typeof document !== 'undefined') {
  const kioskHelperURL = new URL('events/kiosk.js', document.currentScript.src);
