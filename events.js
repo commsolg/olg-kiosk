@@ -79,7 +79,7 @@ window.OLG_EVENTS = [
   },
   {
     "id": "mary-prayer-cenacle",
-    "title": "Rosary with the Virgin Mary",
+    "title": "Cenáculos de oración con la Virgen María",
     "date": "Thursdays except the third Thursday of the month",
     "time": "7 p.m.",
     "location": "Our Lady of Guadalupe Chapel, Helotes",
@@ -99,6 +99,22 @@ window.OLG_EVENTS = [
         "label": "Sign up for a Holy Hour",
         "labelEs": "Inscríbase para una Hora Santa",
         "url": "https://docs.google.com/forms/d/e/1FAIpQLSenHRgq_AMWWnxmRInlygJt-0exiqYax-PM5UaRTEdu3Scc7Q/viewform"
+      }
+    ]
+  },
+  {
+    "id": "emmaus",
+    "title": "Emmaus: Reflections for Sunday Mass",
+    "date": "Weekly on CTSA",
+    "time": "English: Monday at 11:30 a.m. and Wednesday at 7:30 p.m. Spanish: Thursday at 10:30 a.m. and Sunday at 2:30 p.m.",
+    "location": "Catholic Television of San Antonio",
+    "description": "Prepare your heart for Sunday Mass with conversations and reflections on the Gospel. Watch on Spectrum Channel 15 or find episodes on demand through CTSA.",
+    "image": "event-20261115-emmaus.webp",
+    "links": [
+      {
+        "label": "Watch on CTSA",
+        "labelEs": "Ver en CTSA",
+        "url": "https://ctsalive.tv/"
       }
     ]
   }
@@ -167,6 +183,13 @@ window.OLG_EVENT_ES = {
     "time": "9 a. m.–9 p. m. · Termina a las 7 p. m. los jueves de Noche de Adoración",
     "location": "Nuestra Señora de Guadalupe, Helotes",
     "description": "Pase un momento de oración en silencio con Jesús. Para apuntarse a una hora durante el horario habitual, use las hojas en el vestíbulo o inscríbase en línea."
+  },
+  "emmaus": {
+    "title": "Emaús: reflexiones para la Misa dominical",
+    "date": "Cada semana en CTSA",
+    "time": "Español: jueves a las 10:30 a. m. y domingo a las 2:30 p. m. Inglés: lunes a las 11:30 a. m. y miércoles a las 7:30 p. m.",
+    "location": "Televisión Católica de San Antonio",
+    "description": "Prepare su corazón para la Misa dominical con conversaciones y reflexiones sobre el Evangelio. Véalo en el canal 15 de Spectrum o encuentre los episodios a la carta en CTSA."
   }
 };
 
