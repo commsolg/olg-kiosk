@@ -33,15 +33,6 @@ window.OLG_EVENTS = [
     ]
   },
   {
-    "id": "holiday-loteria",
-    "title": "Holiday Lotería Night",
-    "date": "Saturday, November 21, 2026",
-    "time": "7–9 p.m. · Doors open at 6:30 p.m.",
-    "location": "Banquet Hall, Family Center at the OLG Annex",
-    "description": "Bring family and friends for Mexican bingo with the Knights of Columbus. Tickets are $15 for 15 games. Two premium games cost extra. Drinks and snacks are available for purchase. You don’t need to speak Spanish to play. Seating is limited. Get tickets outside church or call Brother Steve at 210-363-1777.",
-    "image": "event-20261115-holiday-loteria.webp"
-  },
-  {
     "id": "musicians-blessing",
     "title": "Blessing of Our Musicians",
     "date": "Saturday and Sunday, November 21–22, 2026",
@@ -127,13 +118,6 @@ window.OLG_EVENT_ES = {
     "time": "7:30–8:30 p. m.",
     "location": "Nuestra Señora de Guadalupe",
     "description": "Venga a aprender a servir en el altar. Inscríbase en el vestíbulo de la iglesia o llene el formulario de interés. Si tiene preguntas sobre el lugar de la capacitación, escriba al diácono Mark a deaconmark@olghelotes.org."
-  },
-  "holiday-loteria": {
-    "title": "Noche festiva de lotería",
-    "date": "Sábado 21 de noviembre de 2026",
-    "time": "7–9 p. m. · Las puertas abren a las 6:30 p. m.",
-    "location": "Salón de banquetes del Centro Familiar, Anexo de OLG",
-    "description": "Venga con su familia y amigos a jugar lotería con los Caballeros de Colón. Los boletos cuestan $15 por 15 juegos. Dos juegos especiales tienen un costo adicional. Habrá bebidas y refrigerios a la venta. El cupo es limitado. Compre boletos afuera de la iglesia o llame al hermano Steve al 210-363-1777."
   },
   "musicians-blessing": {
     "title": "Bendición de nuestros músicos",
