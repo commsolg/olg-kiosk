@@ -21,9 +21,9 @@ window.OLG_EVENTS = [
     "id": "thanksgiving-mass",
     "title": "Bilingual Thanksgiving Day Mass",
     "date": "Thursday, November 26, 2026",
-    "time": "Please confirm the time with the parish office",
+    "time": "10 a.m.",
     "location": "Our Lady of Guadalupe, Helotes",
-    "description": "Come give thanks together at Mass in English and Spanish. Bring the bread and wine you’ll serve at Thanksgiving for a blessing during Mass. The bulletin gives two different start times. Please call 210-695-8791 before making plans.",
+    "description": "Come give thanks together at Mass in English and Spanish. Bring the bread and wine you’ll serve at Thanksgiving for a blessing during Mass.",
     "image": "event-20261122-thanksgiving-mass.webp"
   },
   {
@@ -178,9 +178,9 @@ window.OLG_EVENT_ES = {
   "thanksgiving-mass": {
     "title": "Misa bilingüe de Acción de Gracias",
     "date": "Jueves 26 de noviembre de 2026",
-    "time": "Confirme el horario con la oficina parroquial",
+    "time": "10 a. m.",
     "location": "Nuestra Señora de Guadalupe, Helotes",
-    "description": "Demos gracias juntos en una Misa en inglés y español. Traiga el pan y el vino de su mesa de Acción de Gracias para recibir una bendición durante la Misa. El boletín indica dos horarios distintos. Llame al 210-695-8791 antes de hacer planes."
+    "description": "Demos gracias juntos en una Misa en inglés y español. Traiga el pan y el vino de su mesa de Acción de Gracias para recibir una bendición durante la Misa."
   },
   "christmas-gift-card-drive": {
     "title": "Colecta navideña de tarjetas de regalo de San Vicente de Paúl",
