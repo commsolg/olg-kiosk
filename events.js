@@ -9,15 +9,6 @@ window.OLG_EVENTS = [
     "image": "event-20261122-walk-with-the-king.webp"
   },
   {
-    "id": "missal-swap",
-    "title": "The Great Missal Swap",
-    "date": "Monday, November 23, 2026",
-    "time": "9:30 a.m., after morning Mass",
-    "location": "Our Lady of Guadalupe Church",
-    "description": "Help us prepare for the new liturgical year. We’ll collect the 2026 missals and music issues from the pews and put out the 2027 editions. Helpers of all ages are welcome.",
-    "image": "event-20261122-missal-swap.webp"
-  },
-  {
     "id": "thanksgiving-mass",
     "title": "Bilingual Thanksgiving Day Mass",
     "date": "Thursday, November 26, 2026",
@@ -69,6 +60,7 @@ window.OLG_EVENTS = [
   },
   {
     "id": "breakfast-with-santa-womans-club",
+    "flyerQr": {"url":"https://events.ticketleap.com/tickets/wcosa/breakfast-with-santa-246514088/","label":"Get Woman’s Club breakfast tickets","labelEs":"Consiga boletos para el desayuno del Woman’s Club"},
     "title": "Breakfast with Santa at the Woman’s Club",
     "date": "Saturday, December 5, 2026",
     "time": "9–11 a.m.",
@@ -85,11 +77,12 @@ window.OLG_EVENTS = [
   },
   {
     "id": "guadalupe-pilgrimage",
+    "flyerQr": {"url":"https://commsolg.github.io/olgfeastday/","label":"See the Feast Day program and pilgrimage route","labelEs":"Consulte el programa de la fiesta y la ruta de la peregrinación"},
     "title": "Our Lady of Guadalupe Feast Day Pilgrimage",
     "date": "Saturday, December 12, 2026",
-    "time": "",
-    "location": "See pilgrimage details",
-    "description": "Celebrate the feast of Our Lady of Guadalupe with a pilgrimage. See the official flyer for details about where and when to gather.",
+    "time": "7 a.m. bilingual Mass and blessing, followed by the pilgrimage",
+    "location": "Starts at OLG Helotes, 13715 Riggs Road, Helotes, TX 78023",
+    "description": "Come honor Our Lady of Guadalupe with our parish family. Here is the current plan for December 12. Times, locations and the walking route may change.\n\n6 a.m. Mañanitas with mariachi (to be confirmed).\n7 a.m. Bilingual Mass and blessing at OLG Helotes. Pilgrims leave after Mass for the approximately 16.3-mile walk to the Shrine.\n5 p.m. Bilingual Mass with Archbishop Gustavo at the Our Lady of Guadalupe Shrine, 1321 El Paso St., San Antonio.\n6:30 p.m. Danza.\n7 p.m. Bilingual Mass with Bishop Gary Janak at OLG Helotes.\n8 p.m. Guadalupanos commissioning and fiesta (location to be confirmed).\n\nCheck the Feast Day website for the latest schedule, route, registration and transportation updates.",
     "image": "event-20261122-guadalupe-pilgrimage.webp",
     "gallery": [{"image": "event-20261129-guadalupe-pilgrimage.webp", "caption": "November 29 bulletin flyer", "captionEs": "Volante del boletín del 29 de noviembre"}],
     "links": [
@@ -111,6 +104,7 @@ window.OLG_EVENTS = [
   },
   {
     "id": "seminarians-giving-tree",
+    "flyerQr": {"url":"https://square.link/u/Lk7BGAi6?src=webqr","label":"Donate to Assumption Seminary Associates","labelEs":"Done a Assumption Seminary Associates"},
     "title": "Seminarians’ Giving Tree",
     "date": "By December 15, 2026",
     "time": "",
@@ -145,6 +139,7 @@ window.OLG_EVENTS = [
   },
   {
     "id": "life-teen-retreat",
+    "flyerQr": {"url":"https://pci.jotform.com/form/262674034227153","label":"Register for the Life Teen retreat","labelEs":"Inscríbase en el retiro de Life Teen"},
     "title": "Fire Within: Life Teen Retreat",
     "date": "March 5–7, 2027",
     "time": "",
@@ -224,6 +219,7 @@ window.OLG_EVENTS = [
   },
   {
     "id": "thursday-adoration",
+    "flyerQr": {"url":"https://docs.google.com/forms/d/e/1FAIpQLSenHRgq_AMWWnxmRInlygJt-0exiqYax-PM5UaRTEdu3Scc7Q/viewform","responderLink":true,"label":"Sign up for Thursday Adoration","labelEs":"Inscríbase para la adoración del jueves"},
     "title": "Thursday Eucharistic Adoration",
     "date": "Thursdays",
     "time": "9 a.m.–9 p.m. Ends at 7 p.m. on Night of Worship Thursdays.",
@@ -240,13 +236,6 @@ window.OLG_EVENT_ES = {
     "time": "Al terminar la Misa de las 3:30 p. m.",
     "location": "Nuestra Señora de Guadalupe, Helotes",
     "description": "Venga con su familia o un amigo a caminar en honor a Cristo Rey. Iremos por Riggs Road hasta la glorieta y regresaremos a la parroquia. Todos son bienvenidos."
-  },
-  "missal-swap": {
-    "title": "Cambio de misales",
-    "date": "Lunes 23 de noviembre de 2026",
-    "time": "9:30 a. m., después de la Misa de la mañana",
-    "location": "Iglesia de Nuestra Señora de Guadalupe",
-    "description": "Ayúdenos a preparar la iglesia para el nuevo año litúrgico. Retiraremos de las bancas los misales y cancioneros de 2026 y colocaremos las ediciones de 2027. Pueden ayudar personas de todas las edades."
   },
   "thanksgiving-mass": {
     "title": "Misa bilingüe de Acción de Gracias",
@@ -294,9 +283,9 @@ window.OLG_EVENT_ES = {
   "guadalupe-pilgrimage": {
     "title": "Peregrinación en la fiesta de Nuestra Señora de Guadalupe",
     "date": "Sábado 12 de diciembre de 2026",
-    "time": "",
-    "location": "Consulte los detalles de la peregrinación",
-    "description": "Celebre la fiesta de Nuestra Señora de Guadalupe con una peregrinación. Consulte el volante oficial para saber cómo obtener el horario y el lugar de encuentro."
+    "time": "7 a. m. Misa bilingüe y bendición, con salida de la peregrinación después de Misa",
+    "location": "Salida de Nuestra Señora de Guadalupe, 13715 Riggs Road, Helotes, TX 78023",
+    "description": "Acompañe a nuestra comunidad parroquial a honrar a Nuestra Señora de Guadalupe. Este es el programa previsto para el 12 de diciembre. Los horarios, lugares y la ruta a pie pueden cambiar.\n\n6 a. m. Mañanitas con mariachi (por confirmar).\n7 a. m. Misa bilingüe y bendición en OLG Helotes. Después de Misa, los peregrinos salen rumbo al Santuario, a unas 16.3 millas a pie.\n5 p. m. Misa bilingüe con el Arzobispo Gustavo en el Santuario de Nuestra Señora de Guadalupe, 1321 El Paso St., San Antonio.\n6:30 p. m. Danza.\n7 p. m. Misa bilingüe con el Obispo Gary Janak en OLG Helotes.\n8 p. m. Comisión de los Guadalupanos y Fiesta Guadalupana (lugar por confirmar).\n\nConsulte el sitio de la fiesta para ver las novedades del programa, la ruta, la inscripción y el transporte."
   },
   "christmas-play": {
     "title": "Los seis pastorcitos traviesos",
