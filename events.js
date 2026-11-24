@@ -1,14 +1,5 @@
 window.OLG_EVENTS = [
   {
-    "id": "walk-with-the-king",
-    "title": "Walk with the King: Eucharistic Procession",
-    "date": "Sunday, November 22, 2026",
-    "time": "Right after the 3:30 p.m. Mass",
-    "location": "Our Lady of Guadalupe, Helotes",
-    "description": "Bring your family or a friend and walk with us in honor of Christ the King. We’ll follow Riggs Road to the circle and return to OLG. Everyone is welcome.",
-    "image": "event-20261122-walk-with-the-king.webp"
-  },
-  {
     "id": "thanksgiving-mass",
     "title": "Bilingual Thanksgiving Day Mass",
     "date": "Thursday, November 26, 2026",
@@ -134,7 +125,7 @@ window.OLG_EVENTS = [
     "date": "Sunday, January 10, 2027",
     "time": "5–7 p.m.",
     "location": "OLG Family Center, rooms 102 and 103",
-    "description": "Are you a Catholic man ages 35–60 discerning a call to serve as a deacon? Come learn about the diaconate and bring your questions. For more information, email olgdeacons@olghelotes.org.",
+    "description": "Are you a Catholic man ages 35–60 discerning a call to serve as a deacon? Come learn about the diaconate and bring your questions. For registration or additional information, send an email to olgdeacons@olghelotes.org.",
     "image": "event-20261122-diaconate-information-meeting.webp"
   },
   {
@@ -230,13 +221,6 @@ window.OLG_EVENTS = [
 ];
 
 window.OLG_EVENT_ES = {
-  "walk-with-the-king": {
-    "title": "Camina con Cristo Rey: Procesión eucarística",
-    "date": "Domingo 22 de noviembre de 2026",
-    "time": "Al terminar la Misa de las 3:30 p. m.",
-    "location": "Nuestra Señora de Guadalupe, Helotes",
-    "description": "Venga con su familia o un amigo a caminar en honor a Cristo Rey. Iremos por Riggs Road hasta la glorieta y regresaremos a la parroquia. Todos son bienvenidos."
-  },
   "thanksgiving-mass": {
     "title": "Misa bilingüe de Acción de Gracias",
     "date": "Jueves 26 de noviembre de 2026",
@@ -321,7 +305,7 @@ window.OLG_EVENT_ES = {
     "date": "Domingo 10 de enero de 2027",
     "time": "5–7 p. m.",
     "location": "Centro Familiar de OLG, salones 102 y 103",
-    "description": "Si es un hombre católico de 35 a 60 años y está discerniendo la vocación al diaconado, venga a conocer este ministerio y a compartir sus preguntas. Para más información, escriba a olgdeacons@olghelotes.org."
+    "description": "Si es un hombre católico de 35 a 60 años y está discerniendo la vocación al diaconado, venga a conocer este ministerio y a compartir sus preguntas. Para inscribirse o para obtener más información, envíe un correo a olgdeacons@olghelotes.org."
   },
   "life-teen-retreat": {
     "title": "Fuego interior: Retiro de Life Teen",
